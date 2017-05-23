@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="btFindAddress">150dp</dimen>
+    <dimen name="tvAddressFinderW">200dp</dimen>
+    <dimen name="tvAddressFinderH">50dp</dimen>
+    <dimen name="layoutWidth">200dp</dimen>
+    <dimen name="tvAddressListView">40dp</dimen>
+</resources>

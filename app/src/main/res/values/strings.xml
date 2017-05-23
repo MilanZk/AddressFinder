@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">AddressFinder</string>
+    <string name="btFindAddress">Find Address</string>
+    <string name="btBookmarks">Bookmarks</string>
+    <string name="tvAppName">Address Finder</string>
+    <string name="tvFindAddress">Find Address</string>
+    <string name="etAddress">Address</string>
+    <string name="etCity">City</string>
+    <string name="etState">State</string>
+    <string name="etPostal">Postal</string>
+    <string name="btSearch">Search</string>
+    <string name="tvBookmarks">Bookmarks</string>
+    <string name="tvViewAddress">View address</string>
+</resources>
