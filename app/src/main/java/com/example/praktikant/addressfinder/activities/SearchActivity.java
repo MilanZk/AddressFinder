@@ -60,6 +60,10 @@ public class SearchActivity extends AppCompatActivity {
                 LatLng latLng = SearchResult.getLatLng(SearchResult.getCandidate(candidateList,position.getAddress()));
                 Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putString("address", position.getAddress());
+                bundle.putString("city", position.getCity());
+                bundle.putString("state", position.getState());
+                bundle.putString("postal", position.getPostal());
                 bundle.putParcelable("latlng", latLng);
                 intent.putExtras(bundle);
                 startActivity(intent);
