@@ -1,5 +1,6 @@
 package com.example.praktikant.addressfinder.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,10 +9,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.praktikant.addressfinder.R;
+import com.example.praktikant.addressfinder.SearchResult;
 import com.example.praktikant.addressfinder.model.Position;
 import com.example.praktikant.addressfinder.net.LocationService;
 import com.example.praktikant.addressfinder.net.model.Candidate;
 import com.example.praktikant.addressfinder.net.model.ResponseData;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -47,24 +50,24 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
-    private void getResponse(Position position) {
+    private void getResponse(final Position position) {
         Call<ResponseData> call= LocationService.apiInterface().createResponse(position.getAddress(),position.getCity(),position.getState(),position.getPostal(),"pjson");
         call.enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                ResponseData responseData = response.body();
                 List<Candidate> candidateList = responseData.getCandidates();
-                for (Candidate c: candidateList
-                     ) {
-                    Toast.makeText(SearchActivity.this, c.getLocation().toString(), Toast.LENGTH_SHORT).show();
-                }
-
+                LatLng latLng = SearchResult.getLatLng(SearchResult.getCandidate(candidateList,position.getAddress()));
+                Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("latlng", latLng);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
 
             @Override
             public void onFailure(Call<ResponseData> call, Throwable t) {
                 Toast.makeText(SearchActivity.this, "Failure", Toast.LENGTH_SHORT).show();
-
             }
         });
     }
