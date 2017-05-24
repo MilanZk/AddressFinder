@@ -13,7 +13,7 @@ import retrofit2.http.POST;
  * Created by Praktikant on 23.5.2017..
  */
 
-public interface MyApiInterface {
+public interface LocationApiInterface {
 
 
     @FormUrlEncoded

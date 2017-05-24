@@ -6,4 +6,5 @@
     <dimen name="tvAddressFinderH">50dp</dimen>
     <dimen name="layoutWidth">200dp</dimen>
     <dimen name="tvAddressListView">40dp</dimen>
+    <dimen name="mapLayoutH">400dp</dimen>
 </resources>

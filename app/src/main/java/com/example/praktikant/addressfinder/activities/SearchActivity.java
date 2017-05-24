@@ -9,9 +9,8 @@ import android.widget.Toast;
 
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.model.Position;
-import com.example.praktikant.addressfinder.net.MyService;
+import com.example.praktikant.addressfinder.net.LocationService;
 import com.example.praktikant.addressfinder.net.model.Candidate;
-import com.example.praktikant.addressfinder.net.model.Location;
 import com.example.praktikant.addressfinder.net.model.ResponseData;
 
 import java.util.List;
@@ -36,7 +35,6 @@ public class SearchActivity extends AppCompatActivity {
 
         initComponents();
 
-
         btSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,19 +43,12 @@ public class SearchActivity extends AppCompatActivity {
                 position.setCity(etCity.getText().toString());
                 position.setState(etState.getText().toString());
                 position.setPostal(etPostal.getText().toString());
-
                 getResponse(position);
-
             }
-
-
         });
     }
-
-
-
     private void getResponse(Position position) {
-        Call<ResponseData> call= MyService.apiInterface().createResponse(position.getAddress(),position.getCity(),position.getState(),position.getPostal(),"pjson");
+        Call<ResponseData> call= LocationService.apiInterface().createResponse(position.getAddress(),position.getCity(),position.getState(),position.getPostal(),"pjson");
         call.enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
@@ -77,7 +68,6 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
-
     private void initComponents() {
         etAddress = (EditText) findViewById(R.id.etAddress);
         etCity = (EditText) findViewById(R.id.etCity);
