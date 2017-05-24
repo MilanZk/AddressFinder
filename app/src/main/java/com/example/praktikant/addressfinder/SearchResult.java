@@ -8,8 +8,6 @@ import java.util.List;
 
 public class SearchResult {
 
-
-
     public static Candidate getCandidate(List<Candidate> candidateList, String address){
         for (Candidate candidate: candidateList){
             if (candidate.getAddress().equals(address)){
@@ -18,11 +16,7 @@ public class SearchResult {
         }
         return candidateList.get(0);
     }
-
     public static LatLng getLatLng(Candidate candidate){
-        LatLng latLng = new LatLng(candidate.getLocation().getY(),candidate.getLocation().getX());
-        return latLng;
+        return new LatLng(candidate.getLocation().getY(),candidate.getLocation().getX());
     }
-
-
 }
