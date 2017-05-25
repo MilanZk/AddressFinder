@@ -6,8 +6,10 @@ import com.j256.ormlite.table.DatabaseTable;
 /**
  * Created by Praktikant on 22.5.2017..
  */
-@DatabaseTable(tableName = Position.TABLE_NAME_POSITION)
-public class Position {
+@DatabaseTable(tableName = Bookmark.TABLE_NAME_POSITION)
+public class Bookmark {
+
+    /*Properties*/
 
     public static final String TABLE_NAME_POSITION = "position";
     public static final String FIELD_NAME_ID     = "id";
@@ -15,9 +17,6 @@ public class Position {
     public static final String FIELD_NAME_CITY    = "city";
     public static final String FIELD_NAME_STATE    = "state";
     public static final String FIELD_NAME_POSTAL    = "postal";
-
-
-
 
 
     @DatabaseField(columnName = FIELD_NAME_ID, generatedId = true)
@@ -31,7 +30,7 @@ public class Position {
     @DatabaseField(columnName = FIELD_NAME_POSTAL)
     private String postal;
 
-    public Position(int id, String address, String city, String state, String postal) {
+    public Bookmark(int id, String address, String city, String state, String postal) {
         this.id = id;
         this.address = address;
         this.city = city;
@@ -39,7 +38,7 @@ public class Position {
         this.postal = postal;
     }
 
-    public Position() {
+    public Bookmark() {
     }
 
     public int getId() {

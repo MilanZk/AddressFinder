@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.SearchResult;
-import com.example.praktikant.addressfinder.model.Position;
+import com.example.praktikant.addressfinder.model.Bookmark;
 import com.example.praktikant.addressfinder.net.LocationService;
 import com.example.praktikant.addressfinder.net.model.Candidate;
 import com.example.praktikant.addressfinder.net.model.ResponseData;
@@ -41,29 +41,29 @@ public class SearchActivity extends AppCompatActivity {
         btSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Position position = new Position();
-                position.setAddress(etAddress.getText().toString());
-                position.setCity(etCity.getText().toString());
-                position.setState(etState.getText().toString());
-                position.setPostal(etPostal.getText().toString());
-                getResponse(position);
+                Bookmark bookmark = new Bookmark();
+                bookmark.setAddress(etAddress.getText().toString());
+                bookmark.setCity(etCity.getText().toString());
+                bookmark.setState(etState.getText().toString());
+                bookmark.setPostal(etPostal.getText().toString());
+                getResponse(bookmark);
             }
         });
     }
-    private void getResponse(final Position position) {
-        Call<ResponseData> call= LocationService.apiInterface().createResponse(position.getAddress(),position.getCity(),position.getState(),position.getPostal(),"pjson");
+    private void getResponse(final Bookmark bookmark) {
+        Call<ResponseData> call= LocationService.apiInterface().createResponse(bookmark.getAddress(),bookmark.getCity(),bookmark.getState(),bookmark.getPostal(),"pjson");
         call.enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                ResponseData responseData = response.body();
                 List<Candidate> candidateList = responseData.getCandidates();
-                LatLng latLng = SearchResult.getLatLng(SearchResult.getCandidate(candidateList,position.getAddress()));
+                LatLng latLng = SearchResult.getLatLng(SearchResult.getCandidate(candidateList,bookmark.getAddress()));
                 Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("address", position.getAddress());
-                bundle.putString("city", position.getCity());
-                bundle.putString("state", position.getState());
-                bundle.putString("postal", position.getPostal());
+                bundle.putString("address", bookmark.getAddress());
+                bundle.putString("city", bookmark.getCity());
+                bundle.putString("state", bookmark.getState());
+                bundle.putString("postal", bookmark.getPostal());
                 bundle.putParcelable("latlng", latLng);
                 intent.putExtras(bundle);
                 startActivity(intent);
