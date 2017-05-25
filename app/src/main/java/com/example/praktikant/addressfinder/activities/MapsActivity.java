@@ -32,6 +32,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String address, city, state, postal;
     private ORMDatabaseHelper databaseHelper;
     private Boolean clicked = false;
+    private Boolean fromBookmarkkActivity =false;
 
     /*FragmentActivity Override*/
 
@@ -47,12 +48,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         flbtBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!clicked) {
+                if (!clicked && !fromBookmarkkActivity) {
                     Bookmark bookmark = new Bookmark();
                     bookmark.setAddress(address);
                     bookmark.setCity(city);
                     bookmark.setState(state);
                     bookmark.setPostal(postal);
+                    bookmark.setLatitude(addressLatLng.latitude);
+                    bookmark.setLongitude(addressLatLng.longitude);
                     try {
                         getDatabaseHelper().getBookmarkDao().create(bookmark);
                     } catch (SQLException e) {
@@ -83,6 +86,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         city = bundle.getString("city");
         state = bundle.getString("state");
         postal = bundle.getString("postal");
+        fromBookmarkkActivity = bundle.getBoolean("fromBookmark");
     }
     /*Interface method*/
 

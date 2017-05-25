@@ -9,6 +9,10 @@
     <string name="etState">State</string>
     <string name="etPostal">Postal</string>
     <string name="btSearch">Search</string>
+    <string name="tvAddress">Address:</string>
+    <string name="tvCity">City:</string>
+    <string name="tvState">State:</string>
+    <string name="tvPostal">Postal:</string>
     <string name="tvBookmarks">Bookmarks</string>
     <string name="tvViewAddress">View address</string>
     <string name="title_activity_maps">Map</string>

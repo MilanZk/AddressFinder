@@ -22,5 +22,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        Button btBookmarks = (Button) findViewById(R.id.btBookmarks);
+        btBookmarks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, BookmarksActivity.class);
+                startActivity(i);
+            }
+        });
     }
 }

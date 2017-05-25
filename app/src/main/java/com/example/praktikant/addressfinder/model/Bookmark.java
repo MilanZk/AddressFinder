@@ -1,22 +1,22 @@
 package com.example.praktikant.addressfinder.model;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-/**
- * Created by Praktikant on 22.5.2017..
- */
-@DatabaseTable(tableName = Bookmark.TABLE_NAME_POSITION)
+@DatabaseTable(tableName = Bookmark.TABLE_NAME_BOOKMARK)
 public class Bookmark {
 
     /*Properties*/
 
-    public static final String TABLE_NAME_POSITION = "position";
+    public static final String TABLE_NAME_BOOKMARK = "bookmark";
     public static final String FIELD_NAME_ID     = "id";
     public static final String FIELD_NAME_ADDRESS   = "address";
     public static final String FIELD_NAME_CITY    = "city";
     public static final String FIELD_NAME_STATE    = "state";
     public static final String FIELD_NAME_POSTAL    = "postal";
+    public static final String FIELD_NAME_LATITUDE  = "latitude";
+    public static final String FIELD_NAME_LONGITUDE="longitude";
 
 
     @DatabaseField(columnName = FIELD_NAME_ID, generatedId = true)
@@ -29,13 +29,19 @@ public class Bookmark {
     private String state;
     @DatabaseField(columnName = FIELD_NAME_POSTAL)
     private String postal;
+    @DatabaseField(columnName = FIELD_NAME_LATITUDE)
+    private double latitude;
+    @DatabaseField(columnName = FIELD_NAME_LONGITUDE)
+    private double longitude;
 
-    public Bookmark(int id, String address, String city, String state, String postal) {
+    public Bookmark(int id, String address, String city, String state, String postal, double latitude, double longitude) {
         this.id = id;
         this.address = address;
         this.city = city;
         this.state = state;
         this.postal = postal;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public Bookmark() {
@@ -79,6 +85,22 @@ public class Bookmark {
 
     public void setPostal(String postal) {
         this.postal = postal;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     @Override
