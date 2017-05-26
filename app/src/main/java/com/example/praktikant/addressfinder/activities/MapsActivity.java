@@ -30,8 +30,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Bookmark bookmark;
     private GoogleMap mMap;
     private ORMDatabaseHelper databaseHelper;
-    private Boolean clicked = false;
-    private Boolean fromBookmarkActivity =false;
+    private Boolean clicked;
+    private Boolean isFloatingButtonShown;
+    private FloatingActionButton flacbtBookmark;
 
     /*FragmentActivity overridden methods*/
 
@@ -39,28 +40,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        showTheMap();
+        initComponents();
         getIntentData();
-        FloatingActionButton flacbtBookmark = (FloatingActionButton) findViewById(R.id.flbtBookmark);
+        setUpFloatingActionButton();
+    }
+
+    private void initComponents() {
+    flacbtBookmark= (FloatingActionButton) findViewById(R.id.flbtBookmark);
+    }
+
+    private void setUpFloatingActionButton() {
+        if (isFloatingButtonShown){
+            flacbtBookmark.setVisibility(View.INVISIBLE);
+        }
         flacbtBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!clicked && !fromBookmarkActivity) {
-                    try {
-                        getDatabaseHelper().getBookmarkDao().create(bookmark);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    clicked = true;
-                    Toast.makeText(MapsActivity.this, "Bookmark added", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MapsActivity.this, "Bookmark already added", Toast.LENGTH_SHORT).show();
+                try {
+                    flacbtBookmark.setVisibility(View.INVISIBLE);
+                    getDatabaseHelper().getBookmarkDao().create(bookmark);
+                    flacbtBookmark.setVisibility(View.INVISIBLE);
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         });
     }
+    private void showTheMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -72,7 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getIntentData() {
         Bundle bundle = getIntent().getExtras();
         bookmark = (Bookmark) bundle.getSerializable(getString(R.string.keyIntentBookmark));
-        fromBookmarkActivity = bundle.getBoolean(getString(R.string.isFloatingButtonShown));
+        isFloatingButtonShown = bundle.getBoolean(getString(R.string.isFloatingButtonShown));
     }
     public ORMDatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {

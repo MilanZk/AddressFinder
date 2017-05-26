@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.praktikant.addressfinder.R;
@@ -30,6 +34,7 @@ public class SearchActivity extends AppCompatActivity {
     private Bookmark bookmark;
     private Button btSearch;
     private EditText etAddress, etCity, etState, etPostal;
+    private ProgressBar progressBarSearch;
 
 
     /* AppCompatActivity overridden methods */
@@ -39,11 +44,18 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         initComponents();
-        setUpListeners();
-
+        setUpViews();
     }
 
-    private void setUpListeners() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        progressBarSearch.setVisibility(View.INVISIBLE);
+    }
+
+    private void setUpViews() {
+        progressBarSearch.setVisibility(View.INVISIBLE);
         btSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +65,9 @@ public class SearchActivity extends AppCompatActivity {
                     bookmark.setCity(etCity.getText().toString());
                     bookmark.setState(etState.getText().toString());
                     bookmark.setPostal(etPostal.getText().toString());
+                    progressBarSearch.setVisibility(View.VISIBLE);
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     getResponse(bookmark);
                 }
             }
@@ -86,14 +101,10 @@ public class SearchActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                ResponseData responseData = response.body();
                     List<Candidate> candidateList = responseData.getCandidates();
-                    bookmark.setLatitude(SearchResult.getBestCandidate(candidateList,bookmark.getAddress()).getLocation().getX());
-                    bookmark.setLongitude(SearchResult.getBestCandidate(candidateList,bookmark.getAddress()).getLocation().getY());
-                    Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(getString(R.string.keyIntentBookmark),bookmark);
-                    bundle.putBoolean(getString(R.string.isFloatingButtonShown), true);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                    bookmark.setLatitude(SearchResult.getBestCandidate(candidateList,bookmark.getAddress()).getLocation().getY());
+                    bookmark.setLongitude(SearchResult.getBestCandidate(candidateList,bookmark.getAddress()).getLocation().getX());
+                    appNavigation();
+
             }
             @Override
             public void onFailure(Call<ResponseData> call, Throwable t) {
@@ -101,7 +112,18 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void appNavigation() {
+        Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(getString(R.string.keyIntentBookmark),bookmark);
+        bundle.putBoolean(getString(R.string.isFloatingButtonShown), false);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
     private void initComponents() {
+        progressBarSearch=(ProgressBar) findViewById(R.id.progressBarSearching);
         etAddress = (EditText) findViewById(R.id.etAddress);
         etCity = (EditText) findViewById(R.id.etCity);
         etState = (EditText) findViewById(R.id.etState);

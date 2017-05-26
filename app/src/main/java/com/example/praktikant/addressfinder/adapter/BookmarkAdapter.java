@@ -55,7 +55,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
                     Intent intent = new Intent(context, MapsActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(context.getString(R.string.keyIntentBookmark),bookmarksList.get(getLayoutPosition()));
-                    bundle.putBoolean(context.getString(R.string.isFloatingButtonShown), false);
+                    bundle.putBoolean(context.getString(R.string.isFloatingButtonShown), true);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
