@@ -8,15 +8,13 @@ import java.util.List;
 
 public class SearchResult {
 
-    public static Candidate getCandidate(List<Candidate> candidateList, String address){
+    public static Candidate getBestCandidate(List<Candidate> candidateList, String address){
         for (Candidate candidate: candidateList){
-            if (candidate.getAddress().equals(address)){
+            if (candidate.getAddress().equalsIgnoreCase(address)){
                 return candidate;
             }
         }
         return candidateList.get(0);
     }
-    public static LatLng getLatLng(Candidate candidate){
-        return new LatLng(candidate.getLocation().getY(),candidate.getLocation().getX());
-    }
+
 }

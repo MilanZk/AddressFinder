@@ -20,4 +20,7 @@
     <string name="bookmarkDialogMessage">Do you want to bookmark this address?</string>
     <string name="bookmarkDialogPositiveButton">Yes</string>
     <string name="bookmarkDialogNegativeButton">No</string>
+    <string name="emptyEditTextField">This field cannot be empty</string>
+    <string name="keyIntentBookmark">bookmark</string>
+    <string name="isFloatingButtonShown">Is floating button shown</string>
 </resources>

@@ -1,11 +1,15 @@
 package com.example.praktikant.addressfinder.model;
 
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
+
 @DatabaseTable(tableName = Bookmark.TABLE_NAME_BOOKMARK)
-public class Bookmark {
+public class Bookmark implements Serializable {
 
     /*Properties*/
 

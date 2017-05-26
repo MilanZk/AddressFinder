@@ -20,8 +20,11 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.BookmarkViewHolder>{
+
+    /* Properties */
     private List<Bookmark> bookmarksList;
     private Context context;
+
 
     public BookmarkAdapter(List<Bookmark> bookmarksList, Context context) {
         this.bookmarksList = bookmarksList;
@@ -29,8 +32,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
     }
 
     public class BookmarkViewHolder extends RecyclerView.ViewHolder{
-        public TextView tvAddress, tvCity, tvState, tvPostal;
-        public ImageButton ibtDelete, ibtShowOnMap;
+        private TextView tvAddress, tvCity, tvState, tvPostal;
+        private ImageButton ibtDelete, ibtShowOnMap;
 
         public BookmarkViewHolder(View view){
             super(view);
@@ -40,7 +43,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
             tvPostal = (TextView) view.findViewById(R.id.tvPostalListItem);
             ibtDelete = (ImageButton) view.findViewById(R.id.btDelete);
             ibtShowOnMap = (ImageButton) view.findViewById(R.id.btShowOnMap);
-
             ibtDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -52,16 +54,15 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
                 public void onClick(View v) {
                     Intent intent = new Intent(context, MapsActivity.class);
                     Bundle bundle = new Bundle();
-                    LatLng latLng = new LatLng(bookmarksList.get(getLayoutPosition()).getLatitude(),bookmarksList.get(getLayoutPosition()).getLongitude());
-                    bundle.putParcelable("latlng",latLng);
-                    bundle.putBoolean("fromBookmark", true);
+                    bundle.putSerializable(context.getString(R.string.keyIntentBookmark),bookmarksList.get(getLayoutPosition()));
+                    bundle.putBoolean(context.getString(R.string.isFloatingButtonShown), false);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
             });
         }
     }
-    /*RecyclerView.Adapter override methods*/
+    /*RecyclerView.Adapter overridden methods*/
 
     @Override
     public BookmarkViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

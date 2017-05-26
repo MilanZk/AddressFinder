@@ -19,10 +19,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class BookmarksActivity extends AppCompatActivity{
+
+    /*Properties*/
+
     private ORMDatabaseHelper databaseHelper;
-    private RecyclerView recyclerView;
-    private BookmarkAdapter mAdapter;
     private List<Bookmark> bookmarkList;
+
+    /*AppCompatActivity overridden methods*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +36,10 @@ public class BookmarksActivity extends AppCompatActivity{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewBookmark);
-        mAdapter = new BookmarkAdapter(bookmarkList, this);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewBookmark);
+        BookmarkAdapter mAdapter = new BookmarkAdapter(bookmarkList, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
     }
 

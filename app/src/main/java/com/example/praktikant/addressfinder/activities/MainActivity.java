@@ -1,7 +1,6 @@
 package com.example.praktikant.addressfinder.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +8,8 @@ import android.widget.Button;
 import com.example.praktikant.addressfinder.R;
 
 public class MainActivity extends AppCompatActivity {
+
+    /*AppCompatActivity overridden methods  */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
         Button btBookmarks = (Button) findViewById(R.id.btBookmarks);
         btBookmarks.setOnClickListener(new View.OnClickListener() {
             @Override

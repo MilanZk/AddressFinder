@@ -20,21 +20,20 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     /*Properties*/
 
-    private AlertDialog dialog;
+    private Bookmark bookmark;
     private GoogleMap mMap;
-    private LatLng addressLatLng;
-    private String address, city, state, postal;
     private ORMDatabaseHelper databaseHelper;
     private Boolean clicked = false;
-    private Boolean fromBookmarkkActivity =false;
+    private Boolean fromBookmarkActivity =false;
 
-    /*FragmentActivity Override*/
+    /*FragmentActivity overridden methods*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +43,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getIntentData();
-        FloatingActionButton flbtBookmark = (FloatingActionButton) findViewById(R.id.flbtBookmark);
-        flbtBookmark.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton flacbtBookmark = (FloatingActionButton) findViewById(R.id.flbtBookmark);
+        flacbtBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!clicked && !fromBookmarkkActivity) {
-                    Bookmark bookmark = new Bookmark();
-                    bookmark.setAddress(address);
-                    bookmark.setCity(city);
-                    bookmark.setState(state);
-                    bookmark.setPostal(postal);
-                    bookmark.setLatitude(addressLatLng.latitude);
-                    bookmark.setLongitude(addressLatLng.longitude);
+                if (!clicked && !fromBookmarkActivity) {
                     try {
                         getDatabaseHelper().getBookmarkDao().create(bookmark);
                     } catch (SQLException e) {
@@ -69,7 +61,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -78,21 +69,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             databaseHelper = null;
         }
     }
-
     private void getIntentData() {
         Bundle bundle = getIntent().getExtras();
-        addressLatLng = bundle.getParcelable("latlng");
-        address = bundle.getString("address");
-        city = bundle.getString("city");
-        state = bundle.getString("state");
-        postal = bundle.getString("postal");
-        fromBookmarkkActivity = bundle.getBoolean("fromBookmark");
+        bookmark = (Bookmark) bundle.getSerializable(getString(R.string.keyIntentBookmark));
+        fromBookmarkActivity = bundle.getBoolean(getString(R.string.isFloatingButtonShown));
+    }
+    public ORMDatabaseHelper getDatabaseHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, ORMDatabaseHelper.class);
+        }
+        return databaseHelper;
     }
     /*Interface method*/
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        LatLng addressLatLng = new LatLng( bookmark.getLatitude(),bookmark.getLongitude());
         mMap.addMarker(new MarkerOptions().position(addressLatLng));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(addressLatLng));
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -106,10 +99,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    public ORMDatabaseHelper getDatabaseHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, ORMDatabaseHelper.class);
-        }
-        return databaseHelper;
-    }
+
 }

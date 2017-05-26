@@ -32,72 +32,72 @@ public class SearchActivity extends AppCompatActivity {
     private EditText etAddress, etCity, etState, etPostal;
 
 
-    /* AppCompatActivity override */
+    /* AppCompatActivity overridden methods */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
         initComponents();
+        setUpListeners();
 
+    }
 
+    private void setUpListeners() {
         btSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(TextUtils.isEmpty(etAddress.getText().toString().trim())){
-                    etAddress.setError("This field cannot be empty");
-                    return;
-                }
-                if(TextUtils.isEmpty(etCity.getText())){
-                    etCity.setError("This field cannot be empty");
-                    return;
-                }
-                if(TextUtils.isEmpty(etState.getText())){
-                    etState.setError("This field cannot be empty");
-                    return;
-                }
-                if(TextUtils.isEmpty(etPostal.getText())){
-                    etPostal.setError("This field cannot be empty");
-                    return;
-                }
+                if (validateInputFields()) {
                     bookmark = new Bookmark();
                     bookmark.setAddress(etAddress.getText().toString());
                     bookmark.setCity(etCity.getText().toString());
                     bookmark.setState(etState.getText().toString());
                     bookmark.setPostal(etPostal.getText().toString());
-                    getResponse(bookmark);}
+                    getResponse(bookmark);
+                }
+            }
         });
     }
+    private boolean validateInputFields(){
+        int fieldIsEmpty= 0;
+        if(TextUtils.isEmpty(etAddress.getText().toString().trim())){
+            etAddress.setError(getString(R.string.emptyEditTextField));
+            fieldIsEmpty++;
+        }
+        if(TextUtils.isEmpty(etCity.getText().toString().trim())){
+            etCity.setError(getString(R.string.emptyEditTextField));
+            fieldIsEmpty++;
+        }
+        if(TextUtils.isEmpty(etState.getText().toString().trim())){
+            etState.setError(getString(R.string.emptyEditTextField));
+            fieldIsEmpty++;
+        }
+        if(TextUtils.isEmpty(etPostal.getText().toString().trim())){
+            etPostal.setError(getString(R.string.emptyEditTextField));
+            fieldIsEmpty++;
+        }
+        return fieldIsEmpty == 0;
+    }
+
     private void getResponse(final Bookmark bookmark) {
         Call<ResponseData> call= LocationService.apiInterface().createResponse(bookmark.getAddress(),bookmark.getCity(),bookmark.getState(),bookmark.getPostal(),"pjson");
         call.enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                ResponseData responseData = response.body();
-
-                try {
                     List<Candidate> candidateList = responseData.getCandidates();
-                    LatLng latLng = SearchResult.getLatLng(SearchResult.getCandidate(candidateList,bookmark.getAddress()));
-                    bookmark.setLatitude(latLng.latitude);
-                    bookmark.setLongitude(latLng.longitude);
+                    bookmark.setLatitude(SearchResult.getBestCandidate(candidateList,bookmark.getAddress()).getLocation().getX());
+                    bookmark.setLongitude(SearchResult.getBestCandidate(candidateList,bookmark.getAddress()).getLocation().getY());
                     Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("address", bookmark.getAddress());
-                    bundle.putString("city", bookmark.getCity());
-                    bundle.putString("state", bookmark.getState());
-                    bundle.putString("postal", bookmark.getPostal());
-                    bundle.putParcelable("latlng", latLng);
+                    bundle.putSerializable(getString(R.string.keyIntentBookmark),bookmark);
+                    bundle.putBoolean(getString(R.string.isFloatingButtonShown), true);
                     intent.putExtras(bundle);
                     startActivity(intent);
-                } catch (Exception e) {
-                    Toast.makeText(SearchActivity.this, "Web service is unavailable", Toast.LENGTH_SHORT).show();
-                }
             }
             @Override
             public void onFailure(Call<ResponseData> call, Throwable t) {
-                Toast.makeText(SearchActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchActivity.this, "Check your connection", Toast.LENGTH_SHORT).show();
             }
         });
     }

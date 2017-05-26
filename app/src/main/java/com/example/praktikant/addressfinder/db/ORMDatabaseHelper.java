@@ -44,7 +44,6 @@ public class ORMDatabaseHelper extends OrmLiteSqliteOpenHelper {
         if (mBookmarkDao == null) {
            mBookmarkDao= getDao(Bookmark.class);
         }
-
         return mBookmarkDao;
     }
 
