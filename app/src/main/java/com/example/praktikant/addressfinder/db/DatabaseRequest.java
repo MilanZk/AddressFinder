@@ -33,7 +33,7 @@ public class DatabaseRequest {
         }
     return bookmarkList;
     }
-    public void delleteBookmark(Bookmark bookmark){
+    public void deleteBookmark(Bookmark bookmark){
         try {
             ormDatabaseHelper.getBookmarkDao().delete(bookmark);
         } catch (SQLException e) {
@@ -43,9 +43,9 @@ public class DatabaseRequest {
     public boolean checkIfRecordExistsInDatabase(String bookmarkAddress, String bookmarkCity, String bookmarkState, String bookmarkPostal) {
         List<Bookmark> bookmarkList = new ArrayList<>();
         try {
-            bookmarkList = ormDatabaseHelper.getBookmarkDao().queryBuilder().where().eq(Bookmark.FIELD_NAME_ADDRESS, bookmarkAddress)
-                    .and().eq(Bookmark.FIELD_NAME_CITY, bookmarkCity).and().eq(Bookmark.FIELD_NAME_STATE, bookmarkState)
-                    .and().eq(Bookmark.FIELD_NAME_POSTAL, bookmarkPostal).query();
+            bookmarkList = ormDatabaseHelper.getBookmarkDao().queryBuilder().where().like(Bookmark.FIELD_NAME_ADDRESS, bookmarkAddress)
+                    .and().like(Bookmark.FIELD_NAME_CITY, bookmarkCity).and().like(Bookmark.FIELD_NAME_STATE, bookmarkState)
+                    .and().like(Bookmark.FIELD_NAME_POSTAL, bookmarkPostal).query();
         } catch (SQLException e) {
             e.printStackTrace();
         }

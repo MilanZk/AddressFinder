@@ -1,10 +1,12 @@
 package com.example.praktikant.addressfinder.activities;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.praktikant.addressfinder.R;
@@ -32,7 +34,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private DatabaseRequest databaseRequest;
     private Boolean isFloatingButtonShown;
-    private FloatingActionButton flacbtBookmark;
+    private FloatingActionButton floatingActionButtonBookmark;
 
     /*FragmentActivity overridden methods*/
 
@@ -46,29 +48,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setUpFloatingActionButton();
     }
     private void initComponents() {
-        flacbtBookmark= (FloatingActionButton) findViewById(R.id.flbtBookmark);
+        floatingActionButtonBookmark= (FloatingActionButton) findViewById(R.id.flbtBookmark);
         databaseRequest = new DatabaseRequest(MapsActivity.this);
     }
-
     private void setUpFloatingActionButton() {
         if (!isFloatingButtonShown){
-            flacbtBookmark.setVisibility(View.INVISIBLE);
+            floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
         }
-        flacbtBookmark.setOnClickListener(new View.OnClickListener() {
+        floatingActionButtonBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    flacbtBookmark.setVisibility(View.INVISIBLE);
+                    floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
                     databaseRequest.createBookmark(bookmark);
-                    flacbtBookmark.setVisibility(View.INVISIBLE);
-        }
-        });
+                    floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
+        }});
     }
     private void showTheMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
-
     private void getIntentData() {
         Bundle bundle = getIntent().getExtras();
         bookmark = (Bookmark) bundle.getSerializable(getString(R.string.keyIntentBookmark));

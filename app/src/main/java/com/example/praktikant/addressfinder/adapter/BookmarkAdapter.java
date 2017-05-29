@@ -12,11 +12,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.praktikant.addressfinder.R;
-import com.example.praktikant.addressfinder.activities.BookmarksActivity;
 import com.example.praktikant.addressfinder.activities.MapsActivity;
 import com.example.praktikant.addressfinder.db.DatabaseRequest;
 import com.example.praktikant.addressfinder.model.Bookmark;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -48,10 +46,9 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
                 @Override
                 public void onClick(View v) {
                     DatabaseRequest databaseRequest = new DatabaseRequest(context);
-                    databaseRequest.delleteBookmark(bookmarksList.get(getLayoutPosition()));
+                    databaseRequest.deleteBookmark(bookmarksList.get(getLayoutPosition()));
                     bookmarksList.remove(getLayoutPosition());
                     notifyItemRemoved(getLayoutPosition());
-                    notifyItemRangeRemoved(getLayoutPosition(),bookmarksList.size());
                 }
             });
             ibtShowOnMap.setOnClickListener(new View.OnClickListener() {
