@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.SearchResult;
+import com.example.praktikant.addressfinder.db.DatabaseRequest;
 import com.example.praktikant.addressfinder.model.Bookmark;
 import com.example.praktikant.addressfinder.net.LocationService;
 import com.example.praktikant.addressfinder.net.model.Candidate;
@@ -35,6 +36,8 @@ public class SearchActivity extends AppCompatActivity {
     private Button btSearch;
     private EditText etAddress, etCity, etState, etPostal;
     private ProgressBar progressBarSearch;
+    private boolean isFloatingButonShown;
+    private DatabaseRequest databaseRequest;
 
 
     /* AppCompatActivity overridden methods */
@@ -68,6 +71,9 @@ public class SearchActivity extends AppCompatActivity {
                     progressBarSearch.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    if (databaseRequest.checkIfRecordExistsInDatabase(bookmark.getAddress(), bookmark.getCity(), bookmark.getState(), bookmark.getPostal())){
+                        isFloatingButonShown=false;
+                    }else isFloatingButonShown = true;
                     getResponse(bookmark);
                 }
             }
@@ -116,13 +122,14 @@ public class SearchActivity extends AppCompatActivity {
     private void appNavigation() {
         Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putBoolean(getString(R.string.isFloatingButtonShown), isFloatingButonShown);
         bundle.putSerializable(getString(R.string.keyIntentBookmark),bookmark);
-        bundle.putBoolean(getString(R.string.isFloatingButtonShown), false);
         intent.putExtras(bundle);
         startActivity(intent);
     }
 
     private void initComponents() {
+        databaseRequest = new DatabaseRequest(SearchActivity.this);
         progressBarSearch=(ProgressBar) findViewById(R.id.progressBarSearching);
         etAddress = (EditText) findViewById(R.id.etAddress);
         etCity = (EditText) findViewById(R.id.etCity);

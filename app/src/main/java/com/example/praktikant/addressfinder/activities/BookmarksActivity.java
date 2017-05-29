@@ -11,11 +11,13 @@ import android.widget.TextView;
 
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.adapter.BookmarkAdapter;
+import com.example.praktikant.addressfinder.db.DatabaseRequest;
 import com.example.praktikant.addressfinder.db.ORMDatabaseHelper;
 import com.example.praktikant.addressfinder.model.Bookmark;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookmarksActivity extends AppCompatActivity{
@@ -24,6 +26,7 @@ public class BookmarksActivity extends AppCompatActivity{
 
     private ORMDatabaseHelper databaseHelper;
     private List<Bookmark> bookmarkList;
+    private DatabaseRequest databaseRequest;
 
     /*AppCompatActivity overridden methods*/
 
@@ -31,11 +34,8 @@ public class BookmarksActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmarks);
-        try {
-           bookmarkList=getDatabaseHelper().getBookmarkDao().queryForAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        databaseRequest = new DatabaseRequest(BookmarksActivity.this);
+        bookmarkList = databaseRequest.queryForAllBookmark();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewBookmark);
         BookmarkAdapter mAdapter = new BookmarkAdapter(bookmarkList, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -43,18 +43,4 @@ public class BookmarksActivity extends AppCompatActivity{
         recyclerView.setAdapter(mAdapter);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
-    }
-    public ORMDatabaseHelper getDatabaseHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, ORMDatabaseHelper.class);
-        }
-        return databaseHelper;
-    }
 }

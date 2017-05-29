@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.praktikant.addressfinder.R;
+import com.example.praktikant.addressfinder.db.DatabaseRequest;
 import com.example.praktikant.addressfinder.db.ORMDatabaseHelper;
 import com.example.praktikant.addressfinder.model.Bookmark;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,8 +30,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private Bookmark bookmark;
     private GoogleMap mMap;
-    private ORMDatabaseHelper databaseHelper;
-    private Boolean clicked;
+    private DatabaseRequest databaseRequest;
     private Boolean isFloatingButtonShown;
     private FloatingActionButton flacbtBookmark;
 
@@ -47,24 +47,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void initComponents() {
-    flacbtBookmark= (FloatingActionButton) findViewById(R.id.flbtBookmark);
+        flacbtBookmark= (FloatingActionButton) findViewById(R.id.flbtBookmark);
+        databaseRequest = new DatabaseRequest(MapsActivity.this);
+
     }
 
     private void setUpFloatingActionButton() {
-        if (isFloatingButtonShown){
+        if (!isFloatingButtonShown){
             flacbtBookmark.setVisibility(View.INVISIBLE);
         }
         flacbtBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
                     flacbtBookmark.setVisibility(View.INVISIBLE);
-                    getDatabaseHelper().getBookmarkDao().create(bookmark);
+                    databaseRequest.createBookmark(bookmark);
                     flacbtBookmark.setVisibility(View.INVISIBLE);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        }
         });
     }
     private void showTheMap() {
@@ -73,25 +71,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
-    }
     private void getIntentData() {
         Bundle bundle = getIntent().getExtras();
         bookmark = (Bookmark) bundle.getSerializable(getString(R.string.keyIntentBookmark));
         isFloatingButtonShown = bundle.getBoolean(getString(R.string.isFloatingButtonShown));
     }
-    public ORMDatabaseHelper getDatabaseHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, ORMDatabaseHelper.class);
-        }
-        return databaseHelper;
-    }
+
     /*Interface method*/
 
     @Override
