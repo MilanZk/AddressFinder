@@ -24,9 +24,8 @@ public class BookmarksActivity extends AppCompatActivity{
 
     /*Properties*/
 
-    private ORMDatabaseHelper databaseHelper;
     private List<Bookmark> bookmarkList;
-    private DatabaseRequest databaseRequest;
+    private RecyclerView recyclerView;
 
     /*AppCompatActivity overridden methods*/
 
@@ -34,13 +33,21 @@ public class BookmarksActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmarks);
-        databaseRequest = new DatabaseRequest(BookmarksActivity.this);
+        initComponents();
+        getAllBookmarks();
+        setUpViews();
+    }
+    private void initComponents() {
+        recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewBookmark);
+    }
+    private void getAllBookmarks() {
+        DatabaseRequest databaseRequest = new DatabaseRequest(BookmarksActivity.this);
         bookmarkList = databaseRequest.queryForAllBookmark();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewBookmark);
-        BookmarkAdapter mAdapter = new BookmarkAdapter(bookmarkList, this);
+    }
+    private void setUpViews() {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        BookmarkAdapter mAdapter = new BookmarkAdapter(bookmarkList, this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);
     }
-
 }

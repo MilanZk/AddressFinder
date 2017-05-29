@@ -45,11 +45,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getIntentData();
         setUpFloatingActionButton();
     }
-
     private void initComponents() {
         flacbtBookmark= (FloatingActionButton) findViewById(R.id.flbtBookmark);
         databaseRequest = new DatabaseRequest(MapsActivity.this);
-
     }
 
     private void setUpFloatingActionButton() {

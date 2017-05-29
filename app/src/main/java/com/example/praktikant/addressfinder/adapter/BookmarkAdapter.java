@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.activities.BookmarksActivity;
 import com.example.praktikant.addressfinder.activities.MapsActivity;
+import com.example.praktikant.addressfinder.db.DatabaseRequest;
 import com.example.praktikant.addressfinder.model.Bookmark;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -46,7 +47,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
             ibtDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    DatabaseRequest databaseRequest = new DatabaseRequest(context);
+                    databaseRequest.delleteBookmark(bookmarksList.get(getLayoutPosition()));
+                    bookmarksList.remove(getLayoutPosition());
+                    notifyItemRemoved(getLayoutPosition());
+                    notifyItemRangeRemoved(getLayoutPosition(),bookmarksList.size());
                 }
             });
             ibtShowOnMap.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +60,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
                     Intent intent = new Intent(context, MapsActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(context.getString(R.string.keyIntentBookmark),bookmarksList.get(getLayoutPosition()));
-                    bundle.putBoolean(context.getString(R.string.isFloatingButtonShown), true);
+                    bundle.putBoolean(context.getString(R.string.isFloatingButtonShown), false);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
