@@ -73,11 +73,13 @@ public class SearchActivity extends AppCompatActivity {
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     if (databaseRequest.checkIfRecordExistsInDatabase(bookmark.getAddress(), bookmark.getCity(), bookmark.getState(), bookmark.getPostal())){
+                        Bookmark bookmarkFromDatabase = databaseRequest.getBookmarkFromDatabase(bookmark.getAddress(), bookmark.getCity(), bookmark.getState(), bookmark.getPostal());
+                        appNavigation(bookmarkFromDatabase);
                         isFloatingButtonShown=false;
                     }else {
                         isFloatingButtonShown = true;
+                        getResponse(bookmark);
                     }}
-                getResponse(bookmark);
             }
         });
     }
@@ -111,7 +113,7 @@ public class SearchActivity extends AppCompatActivity {
                     if (candidateList.size()!=0) {
                         bookmark.setLatitude(SearchResult.getBestCandidate(candidateList, bookmark.getAddress()).getLocation().getY());
                         bookmark.setLongitude(SearchResult.getBestCandidate(candidateList, bookmark.getAddress()).getLocation().getX());
-                        appNavigation();
+                        appNavigation(bookmark);
                     }
                     else {
                         showAlertDialog();
@@ -123,7 +125,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
-    private void appNavigation() {
+    private void appNavigation(Bookmark bookmark) {
         Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean(getString(R.string.isFloatingButtonShown), isFloatingButtonShown);

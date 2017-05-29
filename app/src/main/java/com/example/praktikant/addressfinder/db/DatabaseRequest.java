@@ -49,11 +49,17 @@ public class DatabaseRequest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return (bookmarkList.size()!=0);
+    }
+    public Bookmark getBookmarkFromDatabase(String bookmarkAddress, String bookmarkCity, String bookmarkState, String bookmarkPostal) {
+        List<Bookmark> bookmarkList = new ArrayList<>();
         try {
-            bookmarkList.get(0);
-            return true;
-        } catch (IndexOutOfBoundsException e) {
-            return false;
+            bookmarkList = ormDatabaseHelper.getBookmarkDao().queryBuilder().where().like(Bookmark.FIELD_NAME_ADDRESS, bookmarkAddress)
+                    .and().like(Bookmark.FIELD_NAME_CITY, bookmarkCity).and().like(Bookmark.FIELD_NAME_STATE, bookmarkState)
+                    .and().like(Bookmark.FIELD_NAME_POSTAL, bookmarkPostal).query();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+         return bookmarkList.get(0);
     }
 }
