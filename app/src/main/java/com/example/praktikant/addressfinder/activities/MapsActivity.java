@@ -1,5 +1,6 @@
 package com.example.praktikant.addressfinder.activities;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -34,6 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private DatabaseRequest databaseRequest;
     private Boolean isFloatingButtonShown;
+    private Boolean isSnackBarShown;
     private FloatingActionButton floatingActionButtonBookmark;
 
     /*FragmentActivity overridden methods*/
@@ -46,6 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         initComponents();
         getIntentData();
         setUpFloatingActionButton();
+        setUpSnackBar();
     }
     private void initComponents() {
         floatingActionButtonBookmark= (FloatingActionButton) findViewById(R.id.flbtBookmark);
@@ -63,6 +66,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
         }});
     }
+    private void setUpSnackBar() {
+        if (isSnackBarShown){
+            View parentView =  findViewById(R.id.mapsLayout);
+            Snackbar.make(parentView, getString(R.string.alreadySavedBookmark), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
     private void showTheMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -72,6 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Bundle bundle = getIntent().getExtras();
         bookmark = (Bookmark) bundle.getSerializable(getString(R.string.keyIntentBookmark));
         isFloatingButtonShown = bundle.getBoolean(getString(R.string.isFloatingButtonShown));
+        isSnackBarShown = bundle.getBoolean(getString(R.string.isSnackBarShown));
     }
 
     /*Interface method*/
@@ -92,6 +103,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-
-
 }

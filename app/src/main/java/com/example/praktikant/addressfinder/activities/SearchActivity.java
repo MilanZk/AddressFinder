@@ -40,6 +40,7 @@ public class SearchActivity extends AppCompatActivity {
     private EditText etAddress, etCity, etState, etPostal;
     private ProgressBar progressBarSearch;
     private boolean isFloatingButtonShown;
+    private boolean isSnackBarShown;
     private DatabaseRequest databaseRequest;
 
 
@@ -74,10 +75,12 @@ public class SearchActivity extends AppCompatActivity {
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     if (databaseRequest.checkIfRecordExistsInDatabase(bookmark.getAddress(), bookmark.getCity(), bookmark.getState(), bookmark.getPostal())){
                         Bookmark bookmarkFromDatabase = databaseRequest.getBookmarkFromDatabase(bookmark.getAddress(), bookmark.getCity(), bookmark.getState(), bookmark.getPostal());
-                        appNavigation(bookmarkFromDatabase);
                         isFloatingButtonShown=false;
+                        isSnackBarShown = true;
+                        appNavigation(bookmarkFromDatabase);
                     }else {
                         isFloatingButtonShown = true;
+                        isSnackBarShown = false;
                         getResponse(bookmark);
                     }}
             }
@@ -104,7 +107,7 @@ public class SearchActivity extends AppCompatActivity {
         return fieldIsEmpty == 0;
     }
     private void getResponse(final Bookmark bookmark) {
-        Call<ResponseData> call= LocationService.apiInterface().createResponse(bookmark.getAddress(),bookmark.getCity(),bookmark.getState(),bookmark.getPostal(),"pjson");
+        Call<ResponseData> call= LocationService.apiInterface().createResponse(bookmark.getAddress(),bookmark.getCity(),bookmark.getState(),bookmark.getPostal(), Bookmark.DATA_TYPE_JSON);
         call.enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
@@ -129,6 +132,7 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean(getString(R.string.isFloatingButtonShown), isFloatingButtonShown);
+        bundle.putBoolean(getString(R.string.isSnackBarShown), isSnackBarShown);
         bundle.putSerializable(getString(R.string.keyIntentBookmark),bookmark);
         intent.putExtras(bundle);
         startActivity(intent);

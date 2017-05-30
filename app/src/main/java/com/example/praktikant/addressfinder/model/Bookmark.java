@@ -21,6 +21,7 @@ public class Bookmark implements Serializable {
     public static final String FIELD_NAME_POSTAL    = "postal";
     public static final String FIELD_NAME_LATITUDE  = "latitude";
     public static final String FIELD_NAME_LONGITUDE="longitude";
+    public static final String DATA_TYPE_JSON="pjson";
 
 
     @DatabaseField(columnName = FIELD_NAME_ID, generatedId = true)
