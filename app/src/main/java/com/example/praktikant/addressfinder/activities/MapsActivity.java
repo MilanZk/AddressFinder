@@ -1,18 +1,13 @@
 package com.example.praktikant.addressfinder.activities;
 
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.praktikant.addressfinder.R;
-import com.example.praktikant.addressfinder.db.DatabaseRequest;
-import com.example.praktikant.addressfinder.db.ORMDatabaseHelper;
+import com.example.praktikant.addressfinder.db.BookmarkManager;
 import com.example.praktikant.addressfinder.model.Bookmark;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,18 +17,13 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-
-import java.io.Serializable;
-import java.sql.SQLException;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     /*Properties*/
 
     private Bookmark bookmark;
-    private GoogleMap mMap;
-    private DatabaseRequest databaseRequest;
+    private BookmarkManager bookmarkManager;
     private Boolean isFloatingButtonShown;
     private Boolean isSnackBarShown;
     private FloatingActionButton floatingActionButtonBookmark;
@@ -50,9 +40,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setUpFloatingActionButton();
         setUpSnackBar();
     }
+
+    /*Setup subviews*/
+
     private void initComponents() {
         floatingActionButtonBookmark= (FloatingActionButton) findViewById(R.id.flbtBookmark);
-        databaseRequest = new DatabaseRequest(MapsActivity.this);
+        bookmarkManager = new BookmarkManager(MapsActivity.this);
     }
     private void setUpFloatingActionButton() {
         if (!isFloatingButtonShown){
@@ -62,7 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                     floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
-                    databaseRequest.createBookmark(bookmark);
+                    bookmarkManager.createBookmark(bookmark);
                     floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
         }});
     }
@@ -72,12 +65,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Snackbar.make(parentView, getString(R.string.alreadySavedBookmark), Snackbar.LENGTH_LONG).show();
         }
     }
-
     private void showTheMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
+
+    /*Data*/
+
     private void getIntentData() {
         Bundle bundle = getIntent().getExtras();
         bookmark = (Bookmark) bundle.getSerializable(getString(R.string.keyIntentBookmark));
@@ -89,14 +84,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
         LatLng addressLatLng = new LatLng( bookmark.getLatitude(),bookmark.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(addressLatLng));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(addressLatLng));
+        googleMap.addMarker(new MarkerOptions().position(addressLatLng));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(addressLatLng));
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(addressLatLng).zoom(14).build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 return false;

@@ -12,15 +12,20 @@ import java.sql.SQLException;
 
 
 public class ORMDatabaseHelper extends OrmLiteSqliteOpenHelper {
+
+    /*Properties*/
+
     private static final String DATABASE_NAME    = "bookmark.db";
     private static final int    DATABASE_VERSION = 1;
 
     private Dao<Bookmark, Integer> mBookmarkDao = null;
 
-
     public ORMDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
+    /*Interface overridden methods*/
+
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
@@ -40,14 +45,12 @@ public class ORMDatabaseHelper extends OrmLiteSqliteOpenHelper {
             throw new RuntimeException(e);
         }
     }
-    public Dao<Bookmark, Integer> getBookmarkDao() throws SQLException {
+    Dao<Bookmark, Integer> getBookmarkDao() throws SQLException {
         if (mBookmarkDao == null) {
            mBookmarkDao= getDao(Bookmark.class);
         }
         return mBookmarkDao;
     }
-
-    //release resources
     @Override
     public void close() {
         mBookmarkDao = null;

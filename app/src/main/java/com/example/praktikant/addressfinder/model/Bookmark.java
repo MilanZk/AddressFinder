@@ -39,16 +39,6 @@ public class Bookmark implements Serializable {
     @DatabaseField(columnName = FIELD_NAME_LONGITUDE)
     private double longitude;
 
-    public Bookmark(int id, String address, String city, String state, String postal, double latitude, double longitude) {
-        this.id = id;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-        this.postal = postal;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-
     public Bookmark() {
     }
 

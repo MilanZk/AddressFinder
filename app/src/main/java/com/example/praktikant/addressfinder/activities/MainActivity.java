@@ -17,8 +17,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setUpViews();
     }
+
+    /*Setup subviews*/
+
     private void setUpViews() {
-        Button btFindAddress = (Button) findViewById(R.id.btFindAdress);
+        Button btFindAddress = (Button) findViewById(R.id.btFindAddress);
         btFindAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -6,24 +6,20 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.SearchResult;
-import com.example.praktikant.addressfinder.db.DatabaseRequest;
+import com.example.praktikant.addressfinder.db.BookmarkManager;
 import com.example.praktikant.addressfinder.model.Bookmark;
 import com.example.praktikant.addressfinder.net.LocationService;
 import com.example.praktikant.addressfinder.net.model.Candidate;
 import com.example.praktikant.addressfinder.net.model.ResponseData;
-import com.google.android.gms.maps.model.LatLng;
-import com.j256.ormlite.stmt.query.In;
 
 import java.util.List;
 
@@ -41,7 +37,7 @@ public class SearchActivity extends AppCompatActivity {
     private ProgressBar progressBarSearch;
     private boolean isFloatingButtonShown;
     private boolean isSnackBarShown;
-    private DatabaseRequest databaseRequest;
+    private BookmarkManager bookmarkManager;
 
 
     /* AppCompatActivity overridden methods */
@@ -59,6 +55,18 @@ public class SearchActivity extends AppCompatActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBarSearch.setVisibility(View.INVISIBLE);
     }
+
+    /*Setup subviews*/
+
+    private void initComponents() {
+        bookmarkManager = new BookmarkManager(SearchActivity.this);
+        progressBarSearch=(ProgressBar) findViewById(R.id.progressBarSearching);
+        etAddress = (EditText) findViewById(R.id.etAddress);
+        etCity = (EditText) findViewById(R.id.etCity);
+        etState = (EditText) findViewById(R.id.etState);
+        etPostal = (EditText) findViewById(R.id.etPostal);
+        btSearch = (Button) findViewById(R.id.btSearch);
+    }
     private void setUpViews() {
         progressBarSearch.setVisibility(View.INVISIBLE);
         btSearch.setOnClickListener(new View.OnClickListener() {
@@ -73,8 +81,8 @@ public class SearchActivity extends AppCompatActivity {
                     progressBarSearch.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    if (databaseRequest.checkIfRecordExistsInDatabase(bookmark.getAddress(), bookmark.getCity(), bookmark.getState(), bookmark.getPostal())){
-                        Bookmark bookmarkFromDatabase = databaseRequest.getBookmarkFromDatabase(bookmark.getAddress(), bookmark.getCity(), bookmark.getState(), bookmark.getPostal());
+                    if (bookmarkManager.getBookmark(bookmark)!=null){
+                        Bookmark bookmarkFromDatabase = bookmarkManager.getBookmark(bookmark);
                         isFloatingButtonShown=false;
                         isSnackBarShown = true;
                         appNavigation(bookmarkFromDatabase);
@@ -87,66 +95,26 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
     private boolean validateInputFields(){
-        int fieldIsEmpty= 0;
+        boolean fieldIsNotEmpty= true;
         if(TextUtils.isEmpty(etAddress.getText().toString().trim())){
             etAddress.setError(getString(R.string.emptyEditTextField));
-            fieldIsEmpty++;
+            fieldIsNotEmpty=false;
         }
         if(TextUtils.isEmpty(etCity.getText().toString().trim())){
             etCity.setError(getString(R.string.emptyEditTextField));
-            fieldIsEmpty++;
+            fieldIsNotEmpty=false;
         }
         if(TextUtils.isEmpty(etState.getText().toString().trim())){
             etState.setError(getString(R.string.emptyEditTextField));
-            fieldIsEmpty++;
+            fieldIsNotEmpty=false;
         }
         if(TextUtils.isEmpty(etPostal.getText().toString().trim())){
             etPostal.setError(getString(R.string.emptyEditTextField));
-            fieldIsEmpty++;
+            fieldIsNotEmpty=false;
         }
-        return fieldIsEmpty == 0;
+        return fieldIsNotEmpty;
     }
-    private void getResponse(final Bookmark bookmark) {
-        Call<ResponseData> call= LocationService.apiInterface().createResponse(bookmark.getAddress(),bookmark.getCity(),bookmark.getState(),bookmark.getPostal(), Bookmark.DATA_TYPE_JSON);
-        call.enqueue(new Callback<ResponseData>() {
-            @Override
-            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
-                ResponseData responseData = response.body();
-                List<Candidate> candidateList = responseData.getCandidates();
-                    if (candidateList.size()!=0) {
-                        bookmark.setLatitude(SearchResult.getBestCandidate(candidateList, bookmark.getAddress()).getLocation().getY());
-                        bookmark.setLongitude(SearchResult.getBestCandidate(candidateList, bookmark.getAddress()).getLocation().getX());
-                        appNavigation(bookmark);
-                    }
-                    else {
-                        showAlertDialog();
-                    }
-            }
-            @Override
-            public void onFailure(Call<ResponseData> call, Throwable t) {
-                Toast.makeText(SearchActivity.this, R.string.checkYourConnection, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    private void appNavigation(Bookmark bookmark) {
-        Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(getString(R.string.isFloatingButtonShown), isFloatingButtonShown);
-        bundle.putBoolean(getString(R.string.isSnackBarShown), isSnackBarShown);
-        bundle.putSerializable(getString(R.string.keyIntentBookmark),bookmark);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-    private void initComponents() {
-        databaseRequest = new DatabaseRequest(SearchActivity.this);
-        progressBarSearch=(ProgressBar) findViewById(R.id.progressBarSearching);
-        etAddress = (EditText) findViewById(R.id.etAddress);
-        etCity = (EditText) findViewById(R.id.etCity);
-        etState = (EditText) findViewById(R.id.etState);
-        etPostal = (EditText) findViewById(R.id.etPostal);
-        btSearch = (Button) findViewById(R.id.btSearch);
-    }
-    private void showAlertDialog(){
+    private void showAlertDialogNoResults(){
         AlertDialog dialog = new AlertDialog.Builder(SearchActivity.this).setMessage(getString(R.string.noResults))
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -176,5 +144,40 @@ public class SearchActivity extends AppCompatActivity {
                 }).create();
         dialog.show();
     }
+    /*Data*/
 
+    private void getResponse(final Bookmark bookmark) {
+        Call<ResponseData> call= LocationService.apiInterface().createResponse(bookmark.getAddress(),bookmark.getCity(),bookmark.getState(),bookmark.getPostal(), Bookmark.DATA_TYPE_JSON);
+        call.enqueue(new Callback<ResponseData>() {
+            @Override
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+                ResponseData responseData = response.body();
+                List<Candidate> candidateList = responseData.getCandidates();
+                    if (candidateList.size()!=0) {
+                        bookmark.setLatitude(SearchResult.getBestCandidate(candidateList, bookmark.getAddress()).getLocation().getY());
+                        bookmark.setLongitude(SearchResult.getBestCandidate(candidateList, bookmark.getAddress()).getLocation().getX());
+                        appNavigation(bookmark);
+                    }
+                    else {
+                        showAlertDialogNoResults();
+                    }
+            }
+            @Override
+            public void onFailure(Call<ResponseData> call, Throwable t) {
+                Toast.makeText(SearchActivity.this, R.string.checkYourConnection, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /*Navigation and passing data*/
+
+    private void appNavigation(Bookmark bookmark) {
+        Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(getString(R.string.isFloatingButtonShown), isFloatingButtonShown);
+        bundle.putBoolean(getString(R.string.isSnackBarShown), isSnackBarShown);
+        bundle.putSerializable(getString(R.string.keyIntentBookmark),bookmark);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 }
