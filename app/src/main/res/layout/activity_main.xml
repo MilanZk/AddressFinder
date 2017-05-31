@@ -9,53 +9,43 @@
     tools:layout_editor_absoluteX="0dp">
 
     <TextView
-        android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/tvTitleWidth"
+        android:layout_height="@dimen/tvTitleHeight"
         android:text="@string/tvAppName"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="@dimen/tvTitleTextSize"
         android:textStyle="bold"
-        android:id="@+id/textView2"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
+        android:id="@+id/tvAddressFinder"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"
-        tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginTop="@dimen/tvTitleMarginTop"
+        app:layout_constraintHorizontal_bias="0.501"
+        android:layout_marginRight="@dimen/tvTitleMarginRight"
+        android:layout_marginLeft="@dimen/tvTitleMarginLeft" />
 
     <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="116dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/linearLayout"
-        android:layout_marginRight="8dp"
-        app:layout_constraintVertical_bias="0.501"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginTop="@dimen/layoutButtonWrapperMarginTop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/layoutButtonWrapperMarginBottom">
 
         <Button
             android:id="@+id/btFindAddress"
-            android:layout_width="@dimen/btFindAddress"
+            android:layout_width="@dimen/btNavigation"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="@dimen/buttonNavigationMarginBottom"
             android:text="@string/btFindAddress" />
 
         <Button
             android:id="@+id/btBookmarks"
-            android:layout_width="@dimen/btFindAddress"
+            android:layout_width="@dimen/btNavigation"
             android:layout_height="wrap_content"
             android:text="@string/btBookmarks" />
 

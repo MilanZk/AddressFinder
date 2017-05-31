@@ -24,12 +24,12 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
 
     /* Properties */
 
-    private List<Bookmark> bookmarksList;
+    private List<Bookmark> bookmarks;
     private Context context;
 
 
     public BookmarkAdapter(List<Bookmark> bookmarksList, Context context) {
-        this.bookmarksList = bookmarksList;
+        this.bookmarks = bookmarksList;
         this.context = context;
     }
 
@@ -40,9 +40,33 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
         public BookmarkViewHolder(View view){
             super(view);
             tvAddress = (TextView) view.findViewById(R.id.tvAddressListItem);
+            tvAddress.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tvAddress.setSelected(true);
+                }
+            });
             tvCity = (TextView) view.findViewById(R.id.tvCityListItem);
+            tvCity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tvCity.setSelected(true);
+                }
+            });
             tvState = (TextView) view.findViewById(R.id.tvStateListItem);
+            tvState.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tvState.setSelected(true);
+                }
+            });
             tvPostal = (TextView) view.findViewById(R.id.tvPostalListItem);
+            tvPostal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tvPostal.setSelected(true);
+                }
+            });
             ibtDelete = (ImageButton) view.findViewById(R.id.btDelete);
             ibtShowOnMap = (ImageButton) view.findViewById(R.id.btShowOnMap);
             ibtDelete.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +80,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
                 public void onClick(View v) {
                     Intent intent = new Intent(context, MapsActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(context.getString(R.string.keyIntentBookmark),bookmarksList.get(getLayoutPosition()));
+                    bundle.putSerializable(context.getString(R.string.keyIntentBookmark),bookmarks.get(getLayoutPosition()));
                     bundle.putBoolean(context.getString(R.string.isFloatingButtonShown), false);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
@@ -70,8 +94,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             BookmarkManager bookmarkManager = new BookmarkManager(context);
-                            bookmarkManager.deleteBookmark(bookmarksList.get(getLayoutPosition()));
-                            bookmarksList.remove(getLayoutPosition());
+                            bookmarkManager.deleteBookmark(bookmarks.get(getLayoutPosition()));
+                            bookmarks.remove(getLayoutPosition());
                             notifyItemRemoved(getLayoutPosition());
                             dialog.dismiss();
                         }
@@ -101,7 +125,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
 
     @Override
     public void onBindViewHolder(BookmarkViewHolder holder, int position) {
-        Bookmark bookmark = bookmarksList.get(position);
+        Bookmark bookmark = bookmarks.get(position);
         holder.tvAddress.setText(bookmark.getAddress());
         holder.tvCity.setText(bookmark.getCity());
         holder.tvState.setText(bookmark.getState());
@@ -110,7 +134,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
 
     @Override
     public int getItemCount() {
-        return bookmarksList.size();
+        return bookmarks.size();
     }
 
 

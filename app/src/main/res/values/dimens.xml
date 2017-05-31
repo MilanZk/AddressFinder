@@ -1,11 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="btFindAddress">150dp</dimen>
-    <dimen name="tvAddressFinderW">200dp</dimen>
-    <dimen name="tvAddressFinderH">50dp</dimen>
-    <dimen name="layoutWidth">200dp</dimen>
-    <dimen name="tvAddressListView">40dp</dimen>
-    <dimen name="mapLayoutH">400dp</dimen>
-    <dimen name="leftMarginRecyclerItemView">1dp</dimen>
+
+    <dimen name="btNavigation">150dp</dimen>
+    <dimen name="layoutButtonWrapperMarginBottom">8dp</dimen>
+    <dimen name="layoutButtonWrapperMarginTop">8dp</dimen>
+    <dimen name="buttonNavigationMarginBottom">20dp</dimen>
+    <dimen name="constraintLayoutItemHeight">95dp</dimen>
+    <!--Title TextView dimens -->
+    <dimen name="tvTitleWidth">200dp</dimen>
+    <dimen name="tvTitleHeight">40dp</dimen>
+    <dimen name="tvTitleMarginLeft">20dp</dimen>
+    <dimen name="tvTitleMarginTop">20dp</dimen>
+    <dimen name="tvTitleMarginRight">20dp</dimen>
+    <dimen name="tvTitleTextSize">20sp</dimen>
+    <!-- Map Fragment  dimens -->
+    <dimen name="mapFragmentMarginBottom">8dp</dimen>
+    <dimen name="mapFragmentMarginEnd">8dp</dimen>
+    <dimen name="mapFragmentMarginLeft">8dp</dimen>
+    <dimen name="mapFragmentMarginRight">8dp</dimen>
+    <dimen name="mapFragmentMarginStart">8dp</dimen>
+    <dimen name="mapFragmentMarginTop">8dp</dimen>
+    <!-- Floating Action Button Bookmark  dimens -->
+    <dimen name="floatingActionButtonHeight">40dp</dimen>
+    <dimen name="floatingActionButtonWidth">40dp</dimen>
+    <dimen name="floatingActionButtonMarginBottom">38dp</dimen>
+    <dimen name="floatingActionButtonMarginEnd">30dp</dimen>
+    <dimen name="floatingActionButtonMarginRight">30dp</dimen>
+    <!-- RecycleView Bookmarks  dimens -->
+    <dimen name="recycleViewMarginBottom">8dp</dimen>
+    <dimen name="recycleViewMarginEnd">8dp</dimen>
+    <dimen name="recycleViewMarginLeft">8dp</dimen>
+    <dimen name="recycleViewMarginRight">8dp</dimen>
+    <dimen name="recycleViewMarginTop">8dp</dimen>
+    <!-- Search Button  dimens -->
+    <dimen name="btSearchMarginBottom">16dp</dimen>
+    <dimen name="btSearchMarginEnd">8dp</dimen>
+    <dimen name="btSearchMarginLeft">8dp</dimen>
+    <dimen name="btSearchMarginRight">8dp</dimen>
+    <dimen name="btSearchMarginStart">8dp</dimen>
+    <!--Progress bar dimens -->
+    <dimen name="progressBarWidth">76dp</dimen>
+    <dimen name="progressBarHeight">76dp</dimen>
+    <!--Card view dimens -->
+    <dimen name="cardCornerRadius">4dp</dimen>
+    <dimen name="cardCornerElevation">4dp</dimen>
+    <!--Address Item Title -->
+    <dimen name="tvTitleCardViewMarginTop">4dp</dimen>
+    <dimen name="tvTitleCardViewMarginLeft">1dp</dimen>
+    <dimen name="tvTitleCardViewMarginStart">1dp</dimen>
+    <!--Address Item Value -->
+    <dimen name="tvValueCardViewMarginLeft">2dp</dimen>
+    <dimen name="tvValueCardViewMarginStart">2dp</dimen>
+    <dimen name="tvValueCardViewMarginTop">4dp</dimen>
+    <dimen name="tvValueCardViewMarginRight">8dp</dimen>
+    <dimen name="tvValueCardViewMarginEnd">8dp</dimen>
+    <!--Image Button Delete and Show on Map -->
+    <dimen name="btImageCardViewHeight">39dp</dimen>
+    <dimen name="btImageCardViewWidth">50dp</dimen>
+    <dimen name="btImageCardViewMarginBottom">4dp</dimen>
+    <dimen name="btImageCardViewMarginEnd">8dp</dimen>
+    <dimen name="btImageCardViewMarginRight">8dp</dimen>
+    <dimen name="btImageCardViewMarginTop">1dp</dimen>
+    <dimen name="btImageCardViewMarginParentTop">4dp</dimen>
 </resources>

@@ -15,7 +15,7 @@ public class BookmarksActivity extends AppCompatActivity{
 
     /*Properties*/
 
-    private List<Bookmark> bookmarkList;
+    private List<Bookmark> bookmarks;
     private RecyclerView recyclerView;
 
     /*AppCompatActivity overridden methods*/
@@ -36,7 +36,7 @@ public class BookmarksActivity extends AppCompatActivity{
     }
     private void setUpViews() {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        BookmarkAdapter mAdapter = new BookmarkAdapter(bookmarkList, this);
+        BookmarkAdapter mAdapter = new BookmarkAdapter(bookmarks, this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);
     }
@@ -45,6 +45,6 @@ public class BookmarksActivity extends AppCompatActivity{
 
     private void getAllBookmarks() {
         BookmarkManager bookmarkManager = new BookmarkManager(BookmarksActivity.this);
-        bookmarkList = bookmarkManager.getAllBookmarks();
+        bookmarks = bookmarkManager.getAllBookmarks();
     }
 }

@@ -35,8 +35,8 @@ public class SearchActivity extends AppCompatActivity {
     private Button btSearch;
     private EditText etAddress, etCity, etState, etPostal;
     private ProgressBar progressBarSearch;
-    private boolean isFloatingButtonShown;
-    private boolean isSnackBarShown;
+    private Boolean showBookmarkButton;
+    private Boolean showBookmarkAlreadyExist;
     private BookmarkManager bookmarkManager;
 
 
@@ -83,12 +83,12 @@ public class SearchActivity extends AppCompatActivity {
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     if (bookmarkManager.getBookmark(bookmark)!=null){
                         Bookmark bookmarkFromDatabase = bookmarkManager.getBookmark(bookmark);
-                        isFloatingButtonShown=false;
-                        isSnackBarShown = true;
+                        showBookmarkButton=false;
+                        showBookmarkAlreadyExist = true;
                         appNavigation(bookmarkFromDatabase);
                     }else {
-                        isFloatingButtonShown = true;
-                        isSnackBarShown = false;
+                        showBookmarkButton = true;
+                        showBookmarkAlreadyExist = false;
                         getResponse(bookmark);
                     }}
             }
@@ -174,8 +174,8 @@ public class SearchActivity extends AppCompatActivity {
     private void appNavigation(Bookmark bookmark) {
         Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putBoolean(getString(R.string.isFloatingButtonShown), isFloatingButtonShown);
-        bundle.putBoolean(getString(R.string.isSnackBarShown), isSnackBarShown);
+        bundle.putBoolean(getString(R.string.isFloatingButtonShown), showBookmarkButton);
+        bundle.putBoolean(getString(R.string.isSnackBarShown), showBookmarkAlreadyExist);
         bundle.putSerializable(getString(R.string.keyIntentBookmark),bookmark);
         intent.putExtras(bundle);
         startActivity(intent);

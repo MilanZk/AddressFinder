@@ -24,8 +24,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private Bookmark bookmark;
     private BookmarkManager bookmarkManager;
-    private Boolean isFloatingButtonShown;
-    private Boolean isSnackBarShown;
+    private Boolean showBookmarkButton;
+    private Boolean showBookmarkAlreadyExist;
     private FloatingActionButton floatingActionButtonBookmark;
 
     /*FragmentActivity overridden methods*/
@@ -48,7 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bookmarkManager = new BookmarkManager(MapsActivity.this);
     }
     private void setUpFloatingActionButton() {
-        if (!isFloatingButtonShown){
+        if (!showBookmarkButton){
             floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
         }
         floatingActionButtonBookmark.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }});
     }
     private void setUpSnackBar() {
-        if (isSnackBarShown){
+        if (showBookmarkAlreadyExist){
             View parentView =  findViewById(R.id.mapsLayout);
             Snackbar.make(parentView, getString(R.string.alreadySavedBookmark), Snackbar.LENGTH_LONG).show();
         }
@@ -76,8 +76,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getIntentData() {
         Bundle bundle = getIntent().getExtras();
         bookmark = (Bookmark) bundle.getSerializable(getString(R.string.keyIntentBookmark));
-        isFloatingButtonShown = bundle.getBoolean(getString(R.string.isFloatingButtonShown));
-        isSnackBarShown = bundle.getBoolean(getString(R.string.isSnackBarShown));
+        showBookmarkButton = bundle.getBoolean(getString(R.string.isFloatingButtonShown));
+        showBookmarkAlreadyExist = bundle.getBoolean(getString(R.string.isSnackBarShown));
     }
 
     /*Interface method*/
