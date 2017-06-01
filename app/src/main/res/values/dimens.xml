@@ -6,7 +6,8 @@
     <dimen name="layoutButtonWrapperMarginBottom">8dp</dimen>
     <dimen name="layoutButtonWrapperMarginTop">8dp</dimen>
     <dimen name="buttonNavigationMarginBottom">20dp</dimen>
-    <dimen name="constraintLayoutItemHeight">95dp</dimen>
+    <dimen name="constraintLayoutItemHeight">94dp</dimen>
+
     <!--Title TextView dimens -->
     <dimen name="tvTitleWidth">200dp</dimen>
     <dimen name="tvTitleHeight">40dp</dimen>

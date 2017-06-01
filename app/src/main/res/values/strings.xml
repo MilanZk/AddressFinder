@@ -21,9 +21,7 @@
     <string name="bookmarkDialogPositiveButton">Yes</string>
     <string name="bookmarkDialogNegativeButton">No</string>
     <string name="emptyEditTextField">This field cannot be empty</string>
-    <string name="keyIntentBookmark">bookmark</string>
-    <string name="isFloatingButtonShown">Is floating button shown</string>
-    <string name="isSnackBarShown">Is snack bar shown</string>
+
     <string name="checkYourConnection">Please check your network connection</string>
     <string name="noResults">We could not find this address. Would you like to search again?</string>
     <string name="alreadySavedBookmark">You already have this bookmark saved</string>

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.praktikant.addressfinder.Constants;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.db.BookmarkManager;
 import com.example.praktikant.addressfinder.model.Bookmark;
@@ -24,7 +25,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private Bookmark bookmark;
     private BookmarkManager bookmarkManager;
-    private Boolean showBookmarkButton;
+    private Boolean showBookmarkButton = false;
     private Boolean showBookmarkAlreadyExist;
     private FloatingActionButton floatingActionButtonBookmark;
 
@@ -37,8 +38,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         showTheMap();
         initComponents();
         getIntentData();
-        setUpFloatingActionButton();
-        setUpSnackBar();
+        setUpFloatingActionButtonBookmark();
+        setUpSnackBarBookmarkAlreadyExist();
     }
 
     /*Setup subviews*/
@@ -47,7 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         floatingActionButtonBookmark= (FloatingActionButton) findViewById(R.id.flbtBookmark);
         bookmarkManager = new BookmarkManager(MapsActivity.this);
     }
-    private void setUpFloatingActionButton() {
+    private void setUpFloatingActionButtonBookmark() {
         if (!showBookmarkButton){
             floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
         }
@@ -56,10 +57,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                     floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
                     bookmarkManager.createBookmark(bookmark);
-                    floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
-        }});
+                    showBookmarkButton=false;
+            }});
     }
-    private void setUpSnackBar() {
+    private void setUpSnackBarBookmarkAlreadyExist() {
         if (showBookmarkAlreadyExist){
             View parentView =  findViewById(R.id.mapsLayout);
             Snackbar.make(parentView, getString(R.string.alreadySavedBookmark), Snackbar.LENGTH_LONG).show();
@@ -75,12 +76,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void getIntentData() {
         Bundle bundle = getIntent().getExtras();
-        bookmark = (Bookmark) bundle.getSerializable(getString(R.string.keyIntentBookmark));
-        showBookmarkButton = bundle.getBoolean(getString(R.string.isFloatingButtonShown));
-        showBookmarkAlreadyExist = bundle.getBoolean(getString(R.string.isSnackBarShown));
+        bookmark = (Bookmark) bundle.getSerializable(Constants.BOOKMARK_KEY);
+        if (bookmarkManager.getBookmark(bookmark)==null){
+            showBookmarkButton = bundle.getBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY);
+        }
+        showBookmarkAlreadyExist = bundle.getBoolean(Constants.SHOW_ALREADY_EXISTS_BOOKMARK_KEY);
     }
 
-    /*Interface method*/
+    /*OnMapReadyCallback interface method*/
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

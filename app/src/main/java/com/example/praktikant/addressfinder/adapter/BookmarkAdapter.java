@@ -1,6 +1,5 @@
 package com.example.praktikant.addressfinder.adapter;
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.praktikant.addressfinder.AppNavigation;
+import com.example.praktikant.addressfinder.Constants;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.activities.MapsActivity;
 import com.example.praktikant.addressfinder.db.BookmarkManager;
@@ -26,7 +27,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
 
     private List<Bookmark> bookmarks;
     private Context context;
-
 
     public BookmarkAdapter(List<Bookmark> bookmarksList, Context context) {
         this.bookmarks = bookmarksList;
@@ -75,15 +75,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
                     showAlertDialog();
                 }
             });
+            final AppNavigation appNavigation = new AppNavigation(context);
             ibtShowOnMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, MapsActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(context.getString(R.string.keyIntentBookmark),bookmarks.get(getLayoutPosition()));
-                    bundle.putBoolean(context.getString(R.string.isFloatingButtonShown), false);
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
+                    appNavigation.startMapActivity(MapsActivity.class,false,false,bookmarks.get(getLayoutPosition()));
                 }
             });
         }

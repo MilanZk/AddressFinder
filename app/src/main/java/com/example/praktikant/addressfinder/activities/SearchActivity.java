@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.praktikant.addressfinder.AppNavigation;
+import com.example.praktikant.addressfinder.Constants;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.SearchResult;
 import com.example.praktikant.addressfinder.db.BookmarkManager;
@@ -38,7 +40,7 @@ public class SearchActivity extends AppCompatActivity {
     private Boolean showBookmarkButton;
     private Boolean showBookmarkAlreadyExist;
     private BookmarkManager bookmarkManager;
-
+    private AppNavigation appNavigation;
 
     /* AppCompatActivity overridden methods */
 
@@ -68,6 +70,7 @@ public class SearchActivity extends AppCompatActivity {
         btSearch = (Button) findViewById(R.id.btSearch);
     }
     private void setUpViews() {
+        appNavigation= new AppNavigation(this);
         progressBarSearch.setVisibility(View.INVISIBLE);
         btSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,15 +84,15 @@ public class SearchActivity extends AppCompatActivity {
                     progressBarSearch.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    if (bookmarkManager.getBookmark(bookmark)!=null){
-                        Bookmark bookmarkFromDatabase = bookmarkManager.getBookmark(bookmark);
+                    Bookmark bookmarkFromDatabase = bookmarkManager.getBookmark(bookmark);
+                    if (bookmarkFromDatabase!=null){
                         showBookmarkButton=false;
                         showBookmarkAlreadyExist = true;
-                        appNavigation(bookmarkFromDatabase);
+                        appNavigation.startMapActivity(MapsActivity.class, false,true,bookmark);
                     }else {
                         showBookmarkButton = true;
                         showBookmarkAlreadyExist = false;
-                        getResponse(bookmark);
+                        getBookmarkFromWebService(bookmark);
                     }}
             }
         });
@@ -114,7 +117,7 @@ public class SearchActivity extends AppCompatActivity {
         }
         return fieldIsNotEmpty;
     }
-    private void showAlertDialogNoResults(){
+    private void showAlertDialogNoResults() {
         AlertDialog dialog = new AlertDialog.Builder(SearchActivity.this).setMessage(getString(R.string.noResults))
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -144,20 +147,23 @@ public class SearchActivity extends AppCompatActivity {
                 }).create();
         dialog.show();
     }
+
     /*Data*/
 
-    private void getResponse(final Bookmark bookmark) {
-        Call<ResponseData> call= LocationService.apiInterface().createResponse(bookmark.getAddress(),bookmark.getCity(),bookmark.getState(),bookmark.getPostal(), Bookmark.DATA_TYPE_JSON);
+    private void getBookmarkFromWebService(final Bookmark bookmark) {
+        Call<ResponseData> call= LocationService.apiInterface().createResponse(
+                bookmark.getAddress(),bookmark.getCity(),bookmark.getState(),bookmark.getPostal(),
+                Bookmark.DATA_TYPE_JSON);
         call.enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                 ResponseData responseData = response.body();
                 List<Candidate> candidateList = responseData.getCandidates();
-                    if (candidateList.size()!=0) {
+                if (candidateList!=null && candidateList.size()!=0) {
                         bookmark.setLatitude(SearchResult.getBestCandidate(candidateList, bookmark.getAddress()).getLocation().getY());
                         bookmark.setLongitude(SearchResult.getBestCandidate(candidateList, bookmark.getAddress()).getLocation().getX());
-                        appNavigation(bookmark);
-                    }
+                        appNavigation.startMapActivity(MapsActivity.class,showBookmarkButton,showBookmarkAlreadyExist,bookmark);
+                }
                     else {
                         showAlertDialogNoResults();
                     }
@@ -167,17 +173,5 @@ public class SearchActivity extends AppCompatActivity {
                 Toast.makeText(SearchActivity.this, R.string.checkYourConnection, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    /*Navigation and passing data*/
-
-    private void appNavigation(Bookmark bookmark) {
-        Intent intent = new Intent(SearchActivity.this,MapsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(getString(R.string.isFloatingButtonShown), showBookmarkButton);
-        bundle.putBoolean(getString(R.string.isSnackBarShown), showBookmarkAlreadyExist);
-        bundle.putSerializable(getString(R.string.keyIntentBookmark),bookmark);
-        intent.putExtras(bundle);
-        startActivity(intent);
     }
 }
