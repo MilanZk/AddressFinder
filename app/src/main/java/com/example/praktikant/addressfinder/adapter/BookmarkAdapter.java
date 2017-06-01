@@ -40,33 +40,9 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
         public BookmarkViewHolder(View view){
             super(view);
             tvAddress = (TextView) view.findViewById(R.id.tvAddressListItem);
-            tvAddress.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tvAddress.setSelected(true);
-                }
-            });
             tvCity = (TextView) view.findViewById(R.id.tvCityListItem);
-            tvCity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tvCity.setSelected(true);
-                }
-            });
             tvState = (TextView) view.findViewById(R.id.tvStateListItem);
-            tvState.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tvState.setSelected(true);
-                }
-            });
             tvPostal = (TextView) view.findViewById(R.id.tvPostalListItem);
-            tvPostal.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tvPostal.setSelected(true);
-                }
-            });
             ibtDelete = (ImageButton) view.findViewById(R.id.btDelete);
             ibtShowOnMap = (ImageButton) view.findViewById(R.id.btShowOnMap);
             ibtDelete.setOnClickListener(new View.OnClickListener() {
@@ -122,12 +98,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
     @Override
     public void onBindViewHolder(BookmarkViewHolder holder, int position) {
         Bookmark bookmark = bookmarks.get(position);
-        holder.tvAddress.setText(bookmark.getAddress());
-        holder.tvCity.setText(bookmark.getCity());
-        holder.tvState.setText(bookmark.getState());
-        holder.tvPostal.setText(bookmark.getPostal());
+        holder.tvAddress.setText(context.getString(R.string.tvAddress)+" "+bookmark.getAddress());
+        holder.tvCity.setText(context.getString(R.string.tvCity)+" "+bookmark.getCity());
+        holder.tvState.setText(context.getString(R.string.tvState)+" "+bookmark.getState());
+        holder.tvPostal.setText(context.getString(R.string.tvPostal)+" "+bookmark.getPostal());
     }
-
     @Override
     public int getItemCount() {
         return bookmarks.size();

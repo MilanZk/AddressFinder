@@ -1,30 +1,34 @@
 <resources>
     <string name="app_name">AddressFinder</string>
+    <string name="tvAppName">Address Finder</string>
+    <!-- Main activity -->
     <string name="btFindAddress">Find Address</string>
     <string name="btBookmarks">Bookmarks</string>
-    <string name="tvAppName">Address Finder</string>
+    <!-- Find Address activity -->
     <string name="tvFindAddress">Find Address</string>
     <string name="etAddress">Address</string>
     <string name="etCity">City</string>
     <string name="etState">State</string>
     <string name="etPostal">Postal</string>
     <string name="btSearch">Search</string>
+    <string name="emptyEditTextField">This field cannot be empty</string>
+    <!--Bookmarks activity-->
     <string name="tvAddress">Address:</string>
     <string name="tvCity">City:</string>
     <string name="tvState">State:</string>
     <string name="tvPostal">Postal:</string>
     <string name="tvBookmarks">Bookmarks</string>
-    <string name="tvViewAddress">View address</string>
     <string name="title_activity_maps">Map</string>
+    <!--Maps Activity -->
+    <string name="tvViewAddress">View address</string>
+    <!-- dialogs -->
     <string name="bookmarkDialogTitle">Bookmark</string>
     <string name="bookmarkDialogMessage">Do you want to bookmark this address?</string>
     <string name="bookmarkDialogPositiveButton">Yes</string>
     <string name="bookmarkDialogNegativeButton">No</string>
-    <string name="emptyEditTextField">This field cannot be empty</string>
-
+    <string name="deleteBookmark">Are you sure you want to delete this bookmark?</string>
+    <!-- Notify user -->
     <string name="checkYourConnection">Please check your network connection</string>
     <string name="noResults">We could not find this address. Would you like to search again?</string>
     <string name="alreadySavedBookmark">You already have this bookmark saved</string>
-    <string name="deleteBookmark">Are you sure you want to delete this bookmark?</string>
-
 </resources>

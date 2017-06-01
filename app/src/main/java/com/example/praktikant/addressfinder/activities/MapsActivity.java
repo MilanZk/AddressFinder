@@ -1,5 +1,7 @@
 package com.example.praktikant.addressfinder.activities;
 
+import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -25,8 +27,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private Bookmark bookmark;
     private BookmarkManager bookmarkManager;
-    private Boolean showBookmarkButton = false;
-    private Boolean showBookmarkAlreadyExist;
+    private Boolean showBookmarkButton;
+    private Boolean showBookmarkAlreadyExist=false;
     private FloatingActionButton floatingActionButtonBookmark;
 
     /*FragmentActivity overridden methods*/
@@ -35,9 +37,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        if (savedInstanceState!=null){
+            showBookmarkButton = savedInstanceState.getBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY);
+        }
         showTheMap();
         initComponents();
-        getIntentData();
+        getIntentData(showBookmarkButton);
         setUpFloatingActionButtonBookmark();
         setUpSnackBarBookmarkAlreadyExist();
     }
@@ -74,12 +79,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /*Data*/
 
-    private void getIntentData() {
+    private void getIntentData(Boolean bookmarkButttonWasShown) {
         Bundle bundle = getIntent().getExtras();
         bookmark = (Bookmark) bundle.getSerializable(Constants.BOOKMARK_KEY);
-        if (bookmarkManager.getBookmark(bookmark)==null){
+        if (bookmarkButttonWasShown == null) {
             showBookmarkButton = bundle.getBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY);
-        }
+        }else showBookmarkButton=false;
         showBookmarkAlreadyExist = bundle.getBoolean(Constants.SHOW_ALREADY_EXISTS_BOOKMARK_KEY);
     }
 
@@ -99,5 +104,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY,false);
     }
 }
