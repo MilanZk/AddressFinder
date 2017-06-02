@@ -26,4 +26,7 @@
     <string name="checkYourConnection">Please check your network connection</string>
     <string name="noResults">We could not find this address. Would you like to search again?</string>
     <string name="alreadySavedBookmark">You already have this bookmark saved</string>
+    <string name="problemGettingData">There was a problem retrieving the data please try again.</string>
+    <string name="problemSendingData">There was a problem sending the data please try again.</string>
+    <string name="problemDeletingData">There was a problem deleting the data please try again.</string>
 </resources>

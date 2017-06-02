@@ -33,10 +33,9 @@ public class Location {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Location{");
-        sb.append("x=").append(x);
-        sb.append(", y=").append(y);
-        sb.append('}');
-        return sb.toString();
+        String sb = "Location{" + "x=" + x +
+                ", y=" + y +
+                '}';
+        return sb;
     }
 }

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.praktikant.addressfinder.AddressFinderException;
 import com.example.praktikant.addressfinder.AppNavigation;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.SearchResult;
@@ -60,7 +61,6 @@ public class SearchActivity extends AppCompatActivity {
     /*Setup subviews*/
 
     private void initComponents() {
-        bookmarkManager = new BookmarkManager(SearchActivity.this);
         progressBarSearch = (ProgressBar) findViewById(R.id.progressBarSearching);
         etAddress = (EditText) findViewById(R.id.etAddress);
         etCity = (EditText) findViewById(R.id.etCity);
@@ -76,27 +76,32 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validateInputFields()) {
-                    bookmark = new Bookmark();
-                    bookmark.setAddress(etAddress.getText().toString());
-                    bookmark.setCity(etCity.getText().toString());
-                    bookmark.setState(etState.getText().toString());
-                    bookmark.setPostal(etPostal.getText().toString());
-                    progressBarSearch.setVisibility(View.VISIBLE);
-                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    Bookmark bookmarkFromDatabase = bookmarkManager.getBookmark(bookmark);
-                    if (bookmarkFromDatabase != null) {
-                        showBookmarkButton = false;
-                        showBookmarkAlreadyExist = true;
-                        appNavigation.startMapActivity(MapsActivity.class, false, true, bookmark);
-                    } else {
-                        showBookmarkButton = true;
-                        showBookmarkAlreadyExist = false;
-                        getBookmarkFromWebService(bookmark);
-                    }
+                    getBookmarkValuesFromInputFields();
+                    setUpProgressBar(true);
+                    getBookmarkData();
                 }
             }
         });
+    }
+
+    private void setUpProgressBar(boolean visible) {
+        if (visible) {
+            progressBarSearch.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            progressBarSearch.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
+    private void getBookmarkValuesFromInputFields() {
+        bookmark = new Bookmark();
+        bookmark.setAddress(etAddress.getText().toString());
+        bookmark.setCity(etCity.getText().toString());
+        bookmark.setState(etState.getText().toString());
+        bookmark.setPostal(etPostal.getText().toString());
     }
 
     private boolean validateInputFields() {
@@ -121,31 +126,25 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void showAlertDialogNoResults() {
-        AlertDialog dialog = new AlertDialog.Builder(SearchActivity.this).setMessage(getString(R.string.noResults))
+        AlertDialog dialog = new AlertDialog.Builder(SearchActivity.this)
+                .setMessage(getString(R.string.noResults))
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        etAddress.getText().clear();
-                        etCity.getText().clear();
-                        etState.getText().clear();
-                        etPostal.getText().clear();
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        progressBarSearch.setVisibility(View.INVISIBLE);
+                        setUpProgressBar(false);
                     }
                 }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        progressBarSearch.setVisibility(View.INVISIBLE);
+                        setUpProgressBar(false);
                     }
                 }).setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         dialog.dismiss();
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        progressBarSearch.setVisibility(View.INVISIBLE);
+                        setUpProgressBar(false);
                     }
                 }).create();
         dialog.show();
@@ -163,9 +162,12 @@ public class SearchActivity extends AppCompatActivity {
                 ResponseData responseData = response.body();
                 List<Candidate> candidateList = responseData.getCandidates();
                 if (candidateList != null && candidateList.size() != 0) {
-                    bookmark.setLatitude(SearchResult.getBestCandidate(candidateList, bookmark.getAddress()).getLocation().getY());
-                    bookmark.setLongitude(SearchResult.getBestCandidate(candidateList, bookmark.getAddress()).getLocation().getX());
-                    appNavigation.startMapActivity(MapsActivity.class, showBookmarkButton, showBookmarkAlreadyExist, bookmark);
+                    bookmark.setLatitude(SearchResult.getBestCandidate(candidateList,
+                            bookmark.getAddress()).getLocation().getY());
+                    bookmark.setLongitude(SearchResult.getBestCandidate(candidateList,
+                            bookmark.getAddress()).getLocation().getX());
+                    appNavigation.startMapActivity(MapsActivity.class, showBookmarkButton,
+                            showBookmarkAlreadyExist, bookmark);
                 } else {
                     showAlertDialogNoResults();
                 }
@@ -173,8 +175,33 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseData> call, Throwable t) {
-                Toast.makeText(SearchActivity.this, R.string.checkYourConnection, Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchActivity.this, R.string.checkYourConnection,
+                        Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void getBookmarkData() {
+        if (bookmarkManager == null) {
+            bookmarkManager = new BookmarkManager(SearchActivity.this);
+        }
+        Bookmark bookmarkFromDatabase = null;
+        try {
+            bookmarkFromDatabase = bookmarkManager.getBookmark(bookmark);
+        } catch (AddressFinderException e) {
+            Toast.makeText(SearchActivity.this,
+                    getString(R.string.problemGettingData),
+                    Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+        if (bookmarkFromDatabase != null) {
+            showBookmarkButton = false;
+            showBookmarkAlreadyExist = true;
+            appNavigation.startMapActivity(MapsActivity.class, false, true, bookmark);
+        } else {
+            showBookmarkButton = true;
+            showBookmarkAlreadyExist = false;
+            getBookmarkFromWebService(bookmark);
+        }
     }
 }

@@ -3,9 +3,7 @@ package com.example.praktikant.addressfinder.net.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Praktikant on 23.5.2017..
- */
+
 public class SpatialReference {
 
     @SerializedName("wkid")

@@ -6,7 +6,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.Toast;
 
+import com.example.praktikant.addressfinder.AddressFinderException;
 import com.example.praktikant.addressfinder.Constants;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.db.BookmarkManager;
@@ -50,7 +52,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void initComponents() {
         floatingActionButtonBookmark = (FloatingActionButton) findViewById(R.id.flbtBookmark);
-        bookmarkManager = new BookmarkManager(MapsActivity.this);
     }
 
     private void setUpFloatingActionButtonBookmark() {
@@ -61,16 +62,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
-                bookmarkManager.createBookmark(bookmark);
+                createBookmark();
                 showBookmarkButton = false;
             }
         });
     }
 
+
     private void setUpSnackBarBookmarkAlreadyExist() {
         if (showBookmarkAlreadyExist) {
             View parentView = findViewById(R.id.mapsLayout);
-            Snackbar.make(parentView, getString(R.string.alreadySavedBookmark), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(parentView, getString(R.string.alreadySavedBookmark),
+                    Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -82,13 +85,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /*Data*/
 
-    private void getIntentData(Boolean bookmarkButttonWasShown) {
+    private void getIntentData(Boolean bookmarkButtonWasShown) {
         Bundle bundle = getIntent().getExtras();
         bookmark = (Bookmark) bundle.getSerializable(Constants.BOOKMARK_KEY);
-        if (bookmarkButttonWasShown == null) {
+        if (bookmarkButtonWasShown == null) {
             showBookmarkButton = bundle.getBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY);
         } else showBookmarkButton = false;
         showBookmarkAlreadyExist = bundle.getBoolean(Constants.SHOW_ALREADY_EXISTS_BOOKMARK_KEY);
+    }
+
+    private void createBookmark() {
+        try {
+            if (bookmarkManager == null) {
+                bookmarkManager = new BookmarkManager(MapsActivity.this);
+            }
+            bookmarkManager.createBookmark(bookmark);
+        } catch (AddressFinderException e) {
+            Toast.makeText(MapsActivity.this, getString(R.string.problemSendingData),
+                    Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
     /*OnMapReadyCallback interface method*/

@@ -8,10 +8,8 @@
     <dimen name="globalMarginRight">8dp</dimen>
     <dimen name="globalMarginEnd">8dp</dimen>
     <dimen name="globalMarginStart">8dp</dimen>
-
     <dimen name="btNavigation">150dp</dimen>
     <dimen name="buttonNavigationMarginBottom">20dp</dimen>
-
     <!--Title TextView dimens -->
     <dimen name="tvTitleWidth">200dp</dimen>
     <dimen name="tvTitleHeight">40dp</dimen>

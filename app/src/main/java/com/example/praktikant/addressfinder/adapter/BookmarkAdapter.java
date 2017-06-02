@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.praktikant.addressfinder.AddressFinderException;
 import com.example.praktikant.addressfinder.AppNavigation;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.activities.MapsActivity;
@@ -22,75 +24,22 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
 
     /* Properties */
 
-    private List<Bookmark> bookmarks;
-    private Context context;
+    private final List<Bookmark> bookmarks;
+    private final Context context;
 
     public BookmarkAdapter(List<Bookmark> bookmarksList, Context context) {
         this.bookmarks = bookmarksList;
         this.context = context;
     }
 
-    class BookmarkViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvAddress, tvCity, tvState, tvPostal;
-        private ImageButton ibtDelete, ibtShowOnMap;
-
-        public BookmarkViewHolder(View view) {
-            super(view);
-            tvAddress = (TextView) view.findViewById(R.id.tvAddressListItem);
-            tvCity = (TextView) view.findViewById(R.id.tvCityListItem);
-            tvState = (TextView) view.findViewById(R.id.tvStateListItem);
-            tvPostal = (TextView) view.findViewById(R.id.tvPostalListItem);
-            ibtDelete = (ImageButton) view.findViewById(R.id.btDelete);
-            ibtShowOnMap = (ImageButton) view.findViewById(R.id.btShowOnMap);
-            ibtDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showAlertDialog();
-                }
-            });
-            final AppNavigation appNavigation = new AppNavigation(context);
-            ibtShowOnMap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    appNavigation.startMapActivity(MapsActivity.class, false, false, bookmarks.get(getLayoutPosition()));
-                }
-            });
-        }
-
-        private void showAlertDialog() {
-            AlertDialog dialog = new AlertDialog.Builder(context).setMessage(context.getString(R.string.deleteBookmark))
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            BookmarkManager bookmarkManager = new BookmarkManager(context);
-                            bookmarkManager.deleteBookmark(bookmarks.get(getLayoutPosition()));
-                            bookmarks.remove(getLayoutPosition());
-                            notifyItemRemoved(getLayoutPosition());
-                            dialog.dismiss();
-                        }
-                    }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-
-                        }
-                    }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            dialog.dismiss();
-                        }
-                    }).create();
-            dialog.show();
-        }
+    @Override
+    public BookmarkViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_view_item_address, parent, false);
+        return new BookmarkViewHolder(itemView);
     }
 
     /*RecyclerView.Adapter overridden methods*/
-
-    @Override
-    public BookmarkViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view_item_address, parent, false);
-        return new BookmarkViewHolder(itemView);
-    }
 
     @Override
     public void onBindViewHolder(BookmarkViewHolder holder, int position) {
@@ -104,6 +53,88 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
     @Override
     public int getItemCount() {
         return bookmarks.size();
+    }
+
+    class BookmarkViewHolder extends RecyclerView.ViewHolder {
+
+        /*Properties*/
+
+        private TextView tvAddress, tvCity, tvState, tvPostal;
+        private ImageButton ibtDelete, ibtShowOnMap;
+        private BookmarkManager bookmarkManager;
+
+        public BookmarkViewHolder(View view) {
+            super(view);
+            initComponents(view);
+            setUpViews();
+        }
+
+        /*Setup subviews*/
+        private void setUpViews() {
+            ibtDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAlertDialog();
+                }
+            });
+            final AppNavigation appNavigation = new AppNavigation(context);
+            ibtShowOnMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    appNavigation.startMapActivity(MapsActivity.class, false, false,
+                            bookmarks.get(getLayoutPosition()));
+                }
+            });
+        }
+
+        private void initComponents(View view) {
+            tvAddress = (TextView) view.findViewById(R.id.tvAddressListItem);
+            tvCity = (TextView) view.findViewById(R.id.tvCityListItem);
+            tvState = (TextView) view.findViewById(R.id.tvStateListItem);
+            tvPostal = (TextView) view.findViewById(R.id.tvPostalListItem);
+            ibtDelete = (ImageButton) view.findViewById(R.id.btDelete);
+            ibtShowOnMap = (ImageButton) view.findViewById(R.id.btShowOnMap);
+        }
+
+        /*Data*/
+
+        private void deleteBookmarkFromDatabaseAndAdapter() {
+            if (bookmarkManager == null) {
+                bookmarkManager = new BookmarkManager(context);
+            }
+            try {
+                bookmarkManager.deleteBookmark(bookmarks.get(getLayoutPosition()));
+            } catch (AddressFinderException e) {
+                Toast.makeText(context, context.getString(R.string.problemDeletingData),
+                        Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            bookmarks.remove(getLayoutPosition());
+            notifyItemRemoved(getLayoutPosition());
+        }
+
+        private void showAlertDialog() {
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setMessage(context.getString(R.string.deleteBookmark))
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteBookmarkFromDatabaseAndAdapter();
+                            dialog.dismiss();
+                        }
+                    }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            dialog.dismiss();
+                        }
+                    }).create();
+            dialog.show();
+        }
     }
 
 

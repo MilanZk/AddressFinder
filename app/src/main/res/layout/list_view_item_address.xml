@@ -23,8 +23,7 @@
             android:layout_marginLeft="@dimen/globalMarginLeft"
             android:layout_marginTop="@dimen/globalMarginTop"
             android:layout_toLeftOf="@+id/relativeLayout"
-            android:layout_toStartOf="@+id/relativeLayout"
-            android:text="TextView" />
+            android:layout_toStartOf="@+id/relativeLayout" />
 
         <TextView
             android:id="@+id/tvCityListItem"
@@ -36,8 +35,7 @@
             android:layout_alignRight="@+id/tvAddressListItem"
             android:layout_below="@+id/tvAddressListItem"
             android:layout_marginBottom="@dimen/globalMarginBottom"
-            android:layout_marginLeft="@dimen/globalMarginLeft"
-            android:text="TextView" />
+            android:layout_marginLeft="@dimen/globalMarginLeft" />
 
         <TextView
             android:id="@+id/tvStateListItem"
@@ -49,8 +47,7 @@
             android:layout_alignRight="@+id/tvCityListItem"
             android:layout_below="@+id/tvCityListItem"
             android:layout_marginBottom="@dimen/globalMarginBottom"
-            android:layout_marginLeft="@dimen/globalMarginLeft"
-            android:text="TextView" />
+            android:layout_marginLeft="@dimen/globalMarginLeft" />
 
         <TextView
             android:id="@+id/tvPostalListItem"
@@ -62,8 +59,7 @@
             android:layout_alignRight="@+id/tvStateListItem"
             android:layout_below="@+id/tvStateListItem"
             android:layout_marginBottom="@dimen/globalMarginBottom"
-            android:layout_marginLeft="@dimen/globalMarginLeft"
-            android:text="TextView" />
+            android:layout_marginLeft="@dimen/globalMarginLeft" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout"

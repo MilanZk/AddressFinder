@@ -20,7 +20,6 @@ public class Bookmark implements Serializable {
     public static final String FIELD_NAME_LONGITUDE = "longitude";
     public static final String DATA_TYPE_JSON = "pjson";
 
-
     @DatabaseField(columnName = FIELD_NAME_ID, generatedId = true)
     private int id;
     @DatabaseField(columnName = FIELD_NAME_ADDRESS)
@@ -97,13 +96,12 @@ public class Bookmark implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Position{");
-        sb.append("id=").append(id);
-        sb.append(", address='").append(address).append('\'');
-        sb.append(", city='").append(city).append('\'');
-        sb.append(", state='").append(state).append('\'');
-        sb.append(", postal='").append(postal).append('\'');
-        sb.append('}');
-        return sb.toString();
+        String sb = "Position{" + "id=" + id +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", postal='" + postal + '\'' +
+                '}';
+        return sb;
     }
 }

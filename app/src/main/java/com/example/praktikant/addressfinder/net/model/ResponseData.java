@@ -2,13 +2,7 @@ package com.example.praktikant.addressfinder.net.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
-
-/**
- * Created by Praktikant on 23.5.2017..
- */
-
 
 public class ResponseData {
 

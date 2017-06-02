@@ -38,8 +38,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvViewAddress"
         app:layout_constraintVertical_bias="0.0"
-        tools:context="com.example.praktikant.addressfinder.activities.MapsActivity"
-       />
+        tools:context="com.example.praktikant.addressfinder.activities.MapsActivity" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/flbtBookmark"
@@ -52,8 +51,7 @@
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/ic_bookmark_black_24dp"
-        />
+        app:srcCompat="@drawable/ic_bookmark_black_24dp" />
 
 
 </android.support.constraint.ConstraintLayout>

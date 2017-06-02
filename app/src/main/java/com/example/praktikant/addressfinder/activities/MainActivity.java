@@ -10,27 +10,37 @@ import com.example.praktikant.addressfinder.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    /*Properties*/
+
+    private Button btFindAddress, btBookmarks;
+    private AppNavigation appNavigation;
+
     /*AppCompatActivity overridden methods  */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initComponents();
         setUpViews();
+    }
+
+    private void initComponents() {
+        btBookmarks = (Button) findViewById(R.id.btBookmarks);
+        btFindAddress = (Button) findViewById(R.id.btFindAddress);
     }
 
     /*Setup subviews*/
 
     private void setUpViews() {
-        Button btFindAddress = (Button) findViewById(R.id.btFindAddress);
-        final AppNavigation appNavigation = new AppNavigation(this);
+        appNavigation = new AppNavigation(this);
         btFindAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 appNavigation.startActivity(SearchActivity.class);
             }
         });
-        Button btBookmarks = (Button) findViewById(R.id.btBookmarks);
+
         btBookmarks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

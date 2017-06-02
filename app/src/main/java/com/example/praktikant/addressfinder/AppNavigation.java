@@ -11,7 +11,9 @@ public class AppNavigation {
 
     /*Properties*/
 
-    private Context context;
+    private final Context context;
+
+    /*Application Navigation public methods*/
 
     public AppNavigation(Context context) {
         this.context = context;
@@ -22,7 +24,8 @@ public class AppNavigation {
         context.startActivity(intent);
     }
 
-    public void startMapActivity(Class activity, boolean showBookmarkButton, boolean showBookmarkAlreadyExist, Bookmark bookmark) {
+    public void startMapActivity(Class activity, boolean showBookmarkButton,
+                                 boolean showBookmarkAlreadyExist, Bookmark bookmark) {
         Intent intent = new Intent(context, activity);
         Bundle bundle = new Bundle();
         bundle.putBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY, showBookmarkButton);
