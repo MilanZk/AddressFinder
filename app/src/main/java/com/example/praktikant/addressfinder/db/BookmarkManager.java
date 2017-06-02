@@ -21,29 +21,32 @@ public class BookmarkManager {
 
     /*BookmarkManager public methods*/
 
-    public void createBookmark(Bookmark bookmark){
+    public void createBookmark(Bookmark bookmark) {
         try {
             ormDatabaseHelper.getBookmarkDao().create(bookmark);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    public List<Bookmark> getAllBookmarks(){
+
+    public List<Bookmark> getAllBookmarks() {
         List<Bookmark> bookmarkList = new ArrayList<>();
         try {
             bookmarkList = ormDatabaseHelper.getBookmarkDao().queryForAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    return bookmarkList;
+        return bookmarkList;
     }
-    public void deleteBookmark(Bookmark bookmark){
+
+    public void deleteBookmark(Bookmark bookmark) {
         try {
             ormDatabaseHelper.getBookmarkDao().delete(bookmark);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     public Bookmark getBookmark(Bookmark bookmark) {
         List<Bookmark> bookmarks = new ArrayList<>();
         try {
@@ -53,9 +56,8 @@ public class BookmarkManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if (bookmarks.size()!=0){
+        if (bookmarks.size() != 0) {
             return bookmarks.get(0);
-        }
-        else return null;
+        } else return null;
     }
 }

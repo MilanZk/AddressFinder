@@ -1,6 +1,8 @@
 package com.example.praktikant.addressfinder.db;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
 import com.example.praktikant.addressfinder.model.Bookmark;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -10,13 +12,12 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 
-
 public class ORMDatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     /*Properties*/
 
-    private static final String DATABASE_NAME    = "bookmark.db";
-    private static final int    DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "bookmark.db";
+    private static final int DATABASE_VERSION = 1;
 
     private Dao<Bookmark, Integer> mBookmarkDao = null;
 
@@ -25,6 +26,7 @@ public class ORMDatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     /*Interface overridden methods*/
+
 
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
@@ -35,6 +37,7 @@ public class ORMDatabaseHelper extends OrmLiteSqliteOpenHelper {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
@@ -45,12 +48,14 @@ public class ORMDatabaseHelper extends OrmLiteSqliteOpenHelper {
             throw new RuntimeException(e);
         }
     }
+
     Dao<Bookmark, Integer> getBookmarkDao() throws SQLException {
         if (mBookmarkDao == null) {
-           mBookmarkDao= getDao(Bookmark.class);
+            mBookmarkDao = getDao(Bookmark.class);
         }
         return mBookmarkDao;
     }
+
     @Override
     public void close() {
         mBookmarkDao = null;

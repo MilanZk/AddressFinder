@@ -32,13 +32,6 @@
     <dimen name="progressBarHeight">76dp</dimen>
     <!--Card view dimens -->
     <dimen name="cardCornerRadius">4dp</dimen>
-    <dimen name="cardCornerElevation">4dp</dimen>
-    <!--Address Item Value -->
-    <dimen name="tvValueCardViewMarginLeft">2dp</dimen>
-    <dimen name="tvValueCardViewMarginStart">2dp</dimen>
-    <dimen name="tvValueCardViewMarginTop">4dp</dimen>
-    <dimen name="tvValueCardViewMarginRight">8dp</dimen>
-    <dimen name="tvValueCardViewMarginEnd">8dp</dimen>
     <!--Image Button Delete and Show on Map -->
     <dimen name="btImageCardViewHeight">50dp</dimen>
     <dimen name="btImageCardViewWidth">45dp</dimen>

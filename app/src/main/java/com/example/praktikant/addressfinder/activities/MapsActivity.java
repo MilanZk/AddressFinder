@@ -1,11 +1,10 @@
 package com.example.praktikant.addressfinder.activities;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.view.View;
 
 import com.example.praktikant.addressfinder.Constants;
@@ -28,7 +27,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Bookmark bookmark;
     private BookmarkManager bookmarkManager;
     private Boolean showBookmarkButton;
-    private Boolean showBookmarkAlreadyExist=false;
+    private Boolean showBookmarkAlreadyExist = false;
     private FloatingActionButton floatingActionButtonBookmark;
 
     /*FragmentActivity overridden methods*/
@@ -37,7 +36,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        if (savedInstanceState!=null){
+        if (savedInstanceState != null) {
             showBookmarkButton = savedInstanceState.getBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY);
         }
         showTheMap();
@@ -50,27 +49,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /*Setup subviews*/
 
     private void initComponents() {
-        floatingActionButtonBookmark= (FloatingActionButton) findViewById(R.id.flbtBookmark);
+        floatingActionButtonBookmark = (FloatingActionButton) findViewById(R.id.flbtBookmark);
         bookmarkManager = new BookmarkManager(MapsActivity.this);
     }
+
     private void setUpFloatingActionButtonBookmark() {
-        if (!showBookmarkButton){
+        if (!showBookmarkButton) {
             floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
         }
         floatingActionButtonBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
-                    bookmarkManager.createBookmark(bookmark);
-                    showBookmarkButton=false;
-            }});
+                floatingActionButtonBookmark.setVisibility(View.INVISIBLE);
+                bookmarkManager.createBookmark(bookmark);
+                showBookmarkButton = false;
+            }
+        });
     }
+
     private void setUpSnackBarBookmarkAlreadyExist() {
-        if (showBookmarkAlreadyExist){
-            View parentView =  findViewById(R.id.mapsLayout);
+        if (showBookmarkAlreadyExist) {
+            View parentView = findViewById(R.id.mapsLayout);
             Snackbar.make(parentView, getString(R.string.alreadySavedBookmark), Snackbar.LENGTH_LONG).show();
         }
     }
+
     private void showTheMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -84,7 +87,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bookmark = (Bookmark) bundle.getSerializable(Constants.BOOKMARK_KEY);
         if (bookmarkButttonWasShown == null) {
             showBookmarkButton = bundle.getBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY);
-        }else showBookmarkButton=false;
+        } else showBookmarkButton = false;
         showBookmarkAlreadyExist = bundle.getBoolean(Constants.SHOW_ALREADY_EXISTS_BOOKMARK_KEY);
     }
 
@@ -92,7 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng addressLatLng = new LatLng( bookmark.getLatitude(),bookmark.getLongitude());
+        LatLng addressLatLng = new LatLng(bookmark.getLatitude(), bookmark.getLongitude());
         googleMap.addMarker(new MarkerOptions().position(addressLatLng));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(addressLatLng));
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -109,6 +112,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        outState.putBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY,false);
+        outState.putBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY, false);
     }
 }

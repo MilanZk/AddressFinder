@@ -2,8 +2,6 @@ package com.example.praktikant.addressfinder.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.praktikant.addressfinder.AppNavigation;
-import com.example.praktikant.addressfinder.Constants;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.activities.MapsActivity;
 import com.example.praktikant.addressfinder.db.BookmarkManager;
@@ -21,7 +18,7 @@ import com.example.praktikant.addressfinder.model.Bookmark;
 
 import java.util.List;
 
-public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.BookmarkViewHolder>{
+public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.BookmarkViewHolder> {
 
     /* Properties */
 
@@ -33,11 +30,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
         this.context = context;
     }
 
-    class BookmarkViewHolder extends RecyclerView.ViewHolder{
+    class BookmarkViewHolder extends RecyclerView.ViewHolder {
         private TextView tvAddress, tvCity, tvState, tvPostal;
         private ImageButton ibtDelete, ibtShowOnMap;
 
-        public BookmarkViewHolder(View view){
+        public BookmarkViewHolder(View view) {
             super(view);
             tvAddress = (TextView) view.findViewById(R.id.tvAddressListItem);
             tvCity = (TextView) view.findViewById(R.id.tvCityListItem);
@@ -55,7 +52,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
             ibtShowOnMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    appNavigation.startMapActivity(MapsActivity.class,false,false,bookmarks.get(getLayoutPosition()));
+                    appNavigation.startMapActivity(MapsActivity.class, false, false, bookmarks.get(getLayoutPosition()));
                 }
             });
         }
@@ -98,11 +95,12 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
     @Override
     public void onBindViewHolder(BookmarkViewHolder holder, int position) {
         Bookmark bookmark = bookmarks.get(position);
-        holder.tvAddress.setText(context.getString(R.string.tvAddress)+" "+bookmark.getAddress());
-        holder.tvCity.setText(context.getString(R.string.tvCity)+" "+bookmark.getCity());
-        holder.tvState.setText(context.getString(R.string.tvState)+" "+bookmark.getState());
-        holder.tvPostal.setText(context.getString(R.string.tvPostal)+" "+bookmark.getPostal());
+        holder.tvAddress.setText(context.getString(R.string.tvAddress) + " " + bookmark.getAddress());
+        holder.tvCity.setText(context.getString(R.string.tvCity) + " " + bookmark.getCity());
+        holder.tvState.setText(context.getString(R.string.tvState) + " " + bookmark.getState());
+        holder.tvPostal.setText(context.getString(R.string.tvPostal) + " " + bookmark.getPostal());
     }
+
     @Override
     public int getItemCount() {
         return bookmarks.size();

@@ -1,12 +1,10 @@
 package com.example.praktikant.addressfinder.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
-import com.example.praktikant.addressfinder.DataException;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.adapter.BookmarkAdapter;
 import com.example.praktikant.addressfinder.db.BookmarkManager;
@@ -37,6 +35,7 @@ public class BookmarksActivity extends AppCompatActivity {
     private void initComponents() {
         recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewBookmark);
     }
+
     private void setUpViews() {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         BookmarkAdapter mAdapter = new BookmarkAdapter(bookmarks, this);
@@ -46,8 +45,9 @@ public class BookmarksActivity extends AppCompatActivity {
 
     /*Data*/
 
-    private void getAllBookmarks(){
+    private void getAllBookmarks() {
         BookmarkManager bookmarkManager = new BookmarkManager(BookmarksActivity.this);
         bookmarks = bookmarkManager.getAllBookmarks();
+
     }
 }

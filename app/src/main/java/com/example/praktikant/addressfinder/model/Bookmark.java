@@ -1,8 +1,5 @@
 package com.example.praktikant.addressfinder.model;
 
-import android.os.Parcelable;
-
-import com.google.android.gms.maps.model.LatLng;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -14,14 +11,14 @@ public class Bookmark implements Serializable {
     /*Properties*/
 
     public static final String TABLE_NAME_BOOKMARK = "bookmark";
-    public static final String FIELD_NAME_ID     = "id";
-    public static final String FIELD_NAME_ADDRESS   = "address";
-    public static final String FIELD_NAME_CITY    = "city";
-    public static final String FIELD_NAME_STATE    = "state";
-    public static final String FIELD_NAME_POSTAL    = "postal";
-    public static final String FIELD_NAME_LATITUDE  = "latitude";
-    public static final String FIELD_NAME_LONGITUDE="longitude";
-    public static final String DATA_TYPE_JSON="pjson";
+    public static final String FIELD_NAME_ID = "id";
+    public static final String FIELD_NAME_ADDRESS = "address";
+    public static final String FIELD_NAME_CITY = "city";
+    public static final String FIELD_NAME_STATE = "state";
+    public static final String FIELD_NAME_POSTAL = "postal";
+    public static final String FIELD_NAME_LATITUDE = "latitude";
+    public static final String FIELD_NAME_LONGITUDE = "longitude";
+    public static final String DATA_TYPE_JSON = "pjson";
 
 
     @DatabaseField(columnName = FIELD_NAME_ID, generatedId = true)
