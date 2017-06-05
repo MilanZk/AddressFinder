@@ -54,8 +54,7 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        progressBarSearch.setVisibility(View.INVISIBLE);
+        setUpProgressBar(false);
     }
 
     /*Setup subviews*/
@@ -161,7 +160,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
                 ResponseData responseData = response.body();
                 List<Candidate> candidateList = responseData.getCandidates();
-                if (candidateList != null && candidateList.size() != 0) {
+                if (candidateList != null && candidateList.size() > 0) {
                     bookmark.setLatitude(SearchResult.getBestCandidate(candidateList,
                             bookmark.getAddress()).getLocation().getY());
                     bookmark.setLongitude(SearchResult.getBestCandidate(candidateList,

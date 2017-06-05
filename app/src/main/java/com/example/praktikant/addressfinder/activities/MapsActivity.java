@@ -38,14 +38,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        if (savedInstanceState != null) {
-            showBookmarkButton = savedInstanceState.getBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY);
-        }
+        checkSavedAppState(savedInstanceState);
         showTheMap();
         initComponents();
         getIntentData(showBookmarkButton);
         setUpFloatingActionButtonBookmark();
         setUpSnackBarBookmarkAlreadyExist();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY, false);
     }
 
     /*Setup subviews*/
@@ -67,7 +71,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-
 
     private void setUpSnackBarBookmarkAlreadyExist() {
         if (showBookmarkAlreadyExist) {
@@ -107,6 +110,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void checkSavedAppState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            showBookmarkButton = savedInstanceState.getBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY);
+        }
+    }
+
     /*OnMapReadyCallback interface method*/
 
     @Override
@@ -125,9 +134,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        outState.putBoolean(Constants.SHOW_BOOKMARK_BUTTON_KEY, false);
-    }
 }

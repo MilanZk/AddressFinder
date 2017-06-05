@@ -25,7 +25,7 @@ public class BookmarkManager {
         try {
             ormDatabaseHelper.getBookmarkDao().create(bookmark);
         } catch (SQLException e) {
-            throw new AddressFinderException();
+            throw new AddressFinderException(e);
         }
     }
 
@@ -34,7 +34,7 @@ public class BookmarkManager {
         try {
             bookmarkList = ormDatabaseHelper.getBookmarkDao().queryForAll();
         } catch (SQLException e) {
-            throw new AddressFinderException();
+            throw new AddressFinderException(e);
         }
         return bookmarkList;
     }
@@ -43,7 +43,7 @@ public class BookmarkManager {
         try {
             ormDatabaseHelper.getBookmarkDao().delete(bookmark);
         } catch (SQLException e) {
-            throw new AddressFinderException();
+            throw new AddressFinderException(e);
         }
     }
 
@@ -56,9 +56,9 @@ public class BookmarkManager {
                     .like(Bookmark.FIELD_NAME_STATE, bookmark.getState())
                     .and().like(Bookmark.FIELD_NAME_POSTAL, bookmark.getPostal()).query();
         } catch (SQLException e) {
-            throw new AddressFinderException();
+            throw new AddressFinderException(e);
         }
-        if (bookmarks.size() != 0) {
+        if (bookmarks.size() > 0) {
             return bookmarks.get(0);
         } else return null;
     }

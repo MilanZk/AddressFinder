@@ -12,6 +12,7 @@ import com.example.praktikant.addressfinder.adapter.BookmarkAdapter;
 import com.example.praktikant.addressfinder.db.BookmarkManager;
 import com.example.praktikant.addressfinder.model.Bookmark;
 
+import java.util.Collections;
 import java.util.List;
 
 public class BookmarksActivity extends AppCompatActivity {
@@ -41,6 +42,7 @@ public class BookmarksActivity extends AppCompatActivity {
     private void setUpViews() {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         BookmarkAdapter mAdapter = new BookmarkAdapter(bookmarks, this);
+        Collections.reverse(bookmarks);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);
     }

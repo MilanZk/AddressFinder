@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
                 appNavigation.startActivity(SearchActivity.class);
             }
         });
-
         btBookmarks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
