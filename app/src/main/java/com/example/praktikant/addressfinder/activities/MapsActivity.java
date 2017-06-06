@@ -8,11 +8,11 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.praktikant.addressfinder.AddressFinderException;
-import com.example.praktikant.addressfinder.Constants;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.db.BookmarkManager;
+import com.example.praktikant.addressfinder.exceptions.AddressFinderException;
 import com.example.praktikant.addressfinder.model.Bookmark;
+import com.example.praktikant.addressfinder.utils.Constants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

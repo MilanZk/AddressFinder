@@ -1,21 +1,18 @@
-package com.example.praktikant.addressfinder;
+package com.example.praktikant.addressfinder.exceptions;
 
+
+import android.content.Context;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Arrays;
 
-public class AddressFinderException extends Exception {
+public class ExceptionLogger {
 
-    public AddressFinderException(SQLException e) {
-        logIntoFile(Arrays.toString(e.getStackTrace()));
-    }
-
-    private void logIntoFile(String text) {
-        File logFile = new File("sdcard/log.file");
+    public static void logIntoFile(Context context, Exception exception) {
+        File logFile = new File(context.getFilesDir().getAbsolutePath());
         if (!logFile.exists()) {
             try {
                 logFile.createNewFile();
@@ -25,12 +22,11 @@ public class AddressFinderException extends Exception {
         }
         try {
             BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
-            buf.append(text);
+            buf.append(Arrays.toString(exception.getStackTrace()));
             buf.newLine();
             buf.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }

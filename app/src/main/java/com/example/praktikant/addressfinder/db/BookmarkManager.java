@@ -2,7 +2,8 @@ package com.example.praktikant.addressfinder.db;
 
 import android.content.Context;
 
-import com.example.praktikant.addressfinder.AddressFinderException;
+import com.example.praktikant.addressfinder.exceptions.ExceptionLogger;
+import com.example.praktikant.addressfinder.exceptions.AddressFinderException;
 import com.example.praktikant.addressfinder.model.Bookmark;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
@@ -14,8 +15,10 @@ public class BookmarkManager {
     /*Properties*/
 
     private final ORMDatabaseHelper ormDatabaseHelper;
+    private Context context;
 
     public BookmarkManager(Context context) {
+        this.context = context;
         ormDatabaseHelper = OpenHelperManager.getHelper(context, ORMDatabaseHelper.class);
     }
 
@@ -25,6 +28,7 @@ public class BookmarkManager {
         try {
             ormDatabaseHelper.getBookmarkDao().create(bookmark);
         } catch (SQLException e) {
+            ExceptionLogger.logIntoFile(context, e);
             throw new AddressFinderException(e);
         }
     }
@@ -34,6 +38,7 @@ public class BookmarkManager {
         try {
             bookmarkList = ormDatabaseHelper.getBookmarkDao().queryForAll();
         } catch (SQLException e) {
+            ExceptionLogger.logIntoFile(context, e);
             throw new AddressFinderException(e);
         }
         return bookmarkList;
@@ -43,6 +48,7 @@ public class BookmarkManager {
         try {
             ormDatabaseHelper.getBookmarkDao().delete(bookmark);
         } catch (SQLException e) {
+            ExceptionLogger.logIntoFile(context, e);
             throw new AddressFinderException(e);
         }
     }
@@ -56,6 +62,7 @@ public class BookmarkManager {
                     .like(Bookmark.FIELD_NAME_STATE, bookmark.getState())
                     .and().like(Bookmark.FIELD_NAME_POSTAL, bookmark.getPostal()).query();
         } catch (SQLException e) {
+            ExceptionLogger.logIntoFile(context, e);
             throw new AddressFinderException(e);
         }
         if (bookmarks.size() > 0) {

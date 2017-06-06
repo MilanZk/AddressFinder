@@ -5,7 +5,7 @@ import com.example.praktikant.addressfinder.net.model.Candidate;
 
 import java.util.List;
 
-public class SearchResult {
+public class CandidateHelper {
 
     public static Candidate getBestCandidate(List<Candidate> candidateList, String address) {
         for (Candidate candidate : candidateList) {

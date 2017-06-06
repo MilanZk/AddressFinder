@@ -1,4 +1,4 @@
-package com.example.praktikant.addressfinder;
+package com.example.praktikant.addressfinder.utils;
 
 
 public class Constants {

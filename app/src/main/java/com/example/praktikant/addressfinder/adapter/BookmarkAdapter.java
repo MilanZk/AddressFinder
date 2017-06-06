@@ -11,12 +11,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.praktikant.addressfinder.AddressFinderException;
-import com.example.praktikant.addressfinder.AppNavigation;
 import com.example.praktikant.addressfinder.R;
-import com.example.praktikant.addressfinder.activities.MapsActivity;
 import com.example.praktikant.addressfinder.db.BookmarkManager;
+import com.example.praktikant.addressfinder.exceptions.AddressFinderException;
 import com.example.praktikant.addressfinder.model.Bookmark;
+import com.example.praktikant.addressfinder.navigation.AppNavigation;
 
 import java.util.List;
 
@@ -77,11 +76,10 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
                     showAlertDialog();
                 }
             });
-            final AppNavigation appNavigation = new AppNavigation(context);
             ibtShowOnMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    appNavigation.startMapActivity(MapsActivity.class, false, false,
+                    AppNavigation.startMapActivity(context, false, false,
                             bookmarks.get(getLayoutPosition()));
                 }
             });
