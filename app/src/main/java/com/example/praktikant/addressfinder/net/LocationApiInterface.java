@@ -13,7 +13,11 @@ public interface LocationApiInterface {
 
     @FormUrlEncoded
     @POST("?")
-    Call<ResponseData> createResponse(@Field("address") String address, @Field("city") String city, @Field("state") String state, @Field("Zip") String postal, @Field("f") String dataType);
+    Call<ResponseData> createResponse(@Field("address") String address,
+                                      @Field("city") String city,
+                                      @Field("state") String state,
+                                      @Field("Zip") String postal,
+                                      @Field("f") String dataType);
 
 
 }

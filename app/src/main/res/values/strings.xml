@@ -29,4 +29,8 @@
     <string name="problemGettingData">There was a problem retrieving the data please try again.</string>
     <string name="problemSendingData">There was a problem sending the data please try again.</string>
     <string name="problemDeletingData">There was a problem deleting the data please try again.</string>
+    <string name="exceptionMessageCreatingBookmark">Failed to create bookmark.</string>
+    <string name="exceptionMessageGettingData">Failed to load bookmark data.</string>
+    <string name="exceptionMessageDeletingData">Failed to delete bookmark data.</string>
+
 </resources>

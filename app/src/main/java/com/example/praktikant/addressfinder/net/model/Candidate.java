@@ -17,6 +17,10 @@ public class Candidate {
     @Expose
     private Attributes attributes;
 
+    public Candidate(String address) {
+        this.address = address;
+    }
+
     public String getAddress() {
         return address;
     }

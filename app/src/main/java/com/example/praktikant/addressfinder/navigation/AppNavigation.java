@@ -14,7 +14,7 @@ import com.example.praktikant.addressfinder.utils.Constants;
 public class AppNavigation {
 
 
-    /*Application Navigation public methods*/
+    /*Application Navigation methods*/
 
 
     public static void startBookmarksActivity(Context context) {

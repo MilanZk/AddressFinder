@@ -12,10 +12,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.praktikant.addressfinder.CandidateHelper;
 import com.example.praktikant.addressfinder.R;
 import com.example.praktikant.addressfinder.db.BookmarkManager;
 import com.example.praktikant.addressfinder.exceptions.AddressFinderException;
+import com.example.praktikant.addressfinder.helpers.CandidateHelper;
 import com.example.praktikant.addressfinder.model.Bookmark;
 import com.example.praktikant.addressfinder.navigation.AppNavigation;
 import com.example.praktikant.addressfinder.net.LocationService;
@@ -160,9 +160,9 @@ public class SearchActivity extends AppCompatActivity {
                 List<Candidate> candidateList = responseData.getCandidates();
                 if (candidateList != null && candidateList.size() > 0) {
                     bookmark.setLatitude(CandidateHelper.getBestCandidate(candidateList,
-                            bookmark.getAddress()).getLocation().getY());
+                            bookmark).getLocation().getY());
                     bookmark.setLongitude(CandidateHelper.getBestCandidate(candidateList,
-                            bookmark.getAddress()).getLocation().getX());
+                            bookmark).getLocation().getX());
                     AppNavigation.startMapActivity(SearchActivity.this, showBookmarkButton,
                             showBookmarkAlreadyExist, bookmark);
                 } else {
@@ -174,6 +174,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onFailure(Call<ResponseData> call, Throwable t) {
                 Toast.makeText(SearchActivity.this, R.string.checkYourConnection,
                         Toast.LENGTH_SHORT).show();
+                setUpProgressBar(false);
             }
         });
     }
@@ -194,7 +195,7 @@ public class SearchActivity extends AppCompatActivity {
         if (bookmarkFromDatabase != null) {
             showBookmarkButton = false;
             showBookmarkAlreadyExist = true;
-            AppNavigation.startMapActivity(this, false, true, bookmark);
+            AppNavigation.startMapActivity(this, false, true, bookmarkFromDatabase);
         } else {
             showBookmarkButton = true;
             showBookmarkAlreadyExist = false;
